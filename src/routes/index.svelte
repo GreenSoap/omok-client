@@ -6,17 +6,22 @@
   import p5 from "p5";
 
   class OmokBoard {
-    size: number;
-    pieces: Array<Array<OmokPiece>> = new Array<Array<OmokPiece>>();
+    board_size: number;
+    omok_piece_size: number;
+    pieces: Array<Array<OmokPiece>> = [];
     p: p5
-    constructor(p: p5){
+    constructor(p: p5, board_size: number, omok_piece_size: number){
       this.p = p;  
+      this.board_size = board_size;
+      this.omok_piece_size = omok_piece_size;
     }
 
     draw(){
-      for (let x = 0; x < this.size; x++){
-        for (let y = 0; y < this.size; y++){
-          this.pieces[x][y] = new OmokPiece(this.p, x * 25, y * 25, 25);          
+      for (let x = 0; x < this.board_size; x++){
+        this.pieces[x] = [];
+        for (let y = 0; y < this.board_size; y++){
+          this.pieces[x][y] = new OmokPiece(this.p, x * 25, y * this.omok_piece_size, this.omok_piece_size); 
+          this.pieces[x][y].draw();
         }
       }
     }
@@ -37,53 +42,19 @@
       this.p = p;
     }
 
-    draw(x: number, y: number, size: number){
+    draw(){
       this.p.stroke(255);
-      this.p.rect(x, y, size, size);
+      this.p.rect(this.x, this.y, this.size, this.size);
 
       this.p.stroke(0);
-      this.p.line(x+size/2, y, x+size/2, y+size);
+      this.p.line(this.x+this.size/2, this.y, this.x+this.size/2, this.y+this.size);
 
       this.p.stroke(0);
-      this.p.line(x, y+size/2, x+size, y+size/2);
+      this.p.line(this.x, this.y+this.size/2, this.x+this.size, this.y+this.size/2);
     }
   }
-  /*
-  const create_piece = function(p:p5, x: number, y: number, size: number){
-    p.stroke(255);
-    p.rect(x, y, size, size);
 
-    p.stroke(0);
-    p.line(x+size/2, y, x+size/2, y+size);
-
-    p.stroke(0);
-    p.line(x, y+size/2, x+size, y+size/2);
-  }
-
-  const omok_board = function(p: p5) {
-    p.setup = function() {
-      p.noStroke();
-      p.noSmooth();
-      p.createCanvas(700, 410);
-    };
-
-    p.draw = function() {      
-      const board_size = 19;
-      for (let x_pieces_count = 0; x_pieces_count < board_size; x_pieces_count++){
-        for (let y_pieces_count = 0; y_pieces_count < board_size; y_pieces_count++){
-          
-          console.log(x_pieces_count * board_size, y_pieces_count * board_size);
-          create_piece(p, 
-                      x_pieces_count * board_size, 
-                      y_pieces_count * board_size, 
-                      board_size);
-        }
-      }
-
-      
-    };
-  };*/
-  const omok_game = function(p:p5){
+  const omok_game = function(p: p5){
       p.setup = function(){
         p.noStroke();
         p.noSmooth();
@@ -91,7 +62,8 @@
       }
       
       p.draw = function(){
-        //const OmokBoard = new OmokBoard()
+        const omokBoard = new OmokBoard(p, 19, 25);
+        omokBoard.draw();
       }
     }
   const myp5 = new p5(omok_game);
