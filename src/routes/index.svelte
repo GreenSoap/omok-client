@@ -10,8 +10,8 @@
   }
 
   const omok_board = (p: p5) => {
-    const board_side_pieces: number = 5;
-    const omok_piece_size: number = 100;
+    const board_side_pieces: number = 19;
+    const omok_piece_size: number = 37;
     const board_state: OmokBoardState = OmokBoardState.EMPTY;
 
     const omok_piece_radius = new p5.Vector(omok_piece_size, omok_piece_size);
