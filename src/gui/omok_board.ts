@@ -42,14 +42,18 @@ export class OmokBoard {
   
 
   place_piece(mouse_x: number, mouse_y: number){
-    const x = Math.floor(mouse_x / this.piece_size) * this.piece_size;
-    const y = Math.floor(mouse_y / this.piece_size) * this.piece_size;
+    const piece_x = Math.floor(mouse_x / this.piece_size);
+    const piece_y = Math.floor(mouse_y / this.piece_size);
 
-    this.pieces.push(new OmokPiece(this.p, x, y, this.piece_size, this.current_player));
-
+    if (piece_x > this.size || piece_y > this.size ||
+      piece_x < 0 || piece_y < 0)
+      return false;
+    
+    this.pieces.push(new OmokPiece(this.p, piece_x  * this.piece_size, piece_y  * this.piece_size, this.piece_size, this.current_player));
     this.current_player = (this.current_player+1) % this.player_amount;
-
     this.pieces[this.pieces.length-1].draw();
+
+    return true;
   }
 
   highlight_piece_position(mouse_x: number, mouse_y: number){

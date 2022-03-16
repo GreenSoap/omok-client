@@ -1,15 +1,21 @@
-<main></main>
-<section class="debug-panel">
-  <span id="mouse-pos"></span>
-  <span id="current-piece"></span>
-  <span id="player-turn">Player 1 Turn</span>
-</section>
+<main>
+  <section class="debug-panel">
+    <span contenteditable="true" bind:textContent={mouse_coord}></span>
+    <span contenteditable="true" bind:textContent={piece_coord}></span>
+    <span contenteditable="true" bind:textContent={player_turn}>Player 1 Turn</span>
+  </section>
+</main>
+
 <style>
   span{
     display: block;
   }
+  .debug-panel{
+    user-select: none;
+  }
 </style>
 <script lang="ts">
+  let mouse_coord, piece_coord, player_turn;
   import p5 from "p5";
   import { OmokBoard } from '../gui/omok_board';  
 
@@ -23,16 +29,17 @@
     }
 
     p.mouseClicked = (event: any) => { 
-      board.place_piece(p.mouseX, p.mouseY);
-      document.getElementById("player-turn").innerText = `Player ${board.current_player+1} Turn`;
+      const piece_has_been_placed = board.place_piece(p.mouseX, p.mouseY);
+      if (piece_has_been_placed){
+        player_turn = `Player ${board.current_player+1} Turn`;
+      }
     }
     
     p.mouseMoved = (event: any) => {
       const x = Math.floor(p.mouseX / board.piece_size);
       const y = Math.floor(p.mouseY / board.piece_size);
-
-      document.getElementById("mouse-pos").innerText = `Mouse pos: ${p.mouseX + " " + p.mouseY}`;
-      document.getElementById("current-piece").innerText = `Current piece: ${x + " " + y}`;
+      mouse_coord = `Mouse pos: ${p.mouseX + " " + p.mouseY}`;
+      piece_coord = `Current piece: ${x + " " + y}`;
 
       board.draw();
       board.highlight_piece_position(p.mouseX, p.mouseY);
