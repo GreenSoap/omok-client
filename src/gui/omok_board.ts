@@ -14,13 +14,15 @@ export class OmokBoard {
   pieces: Array<OmokPiece> = [];
   current_player = 0;
   player_amount: number;
+  piece_offset: number;
   p: p5;
   
-  constructor(p: p5, size: number, piece_size: number, player_amount: number){
+  constructor(p: p5, size: number, piece_size: number, piece_offset: number, player_amount: number){
     this.p = p;
     this.size = size;
     this.piece_size = piece_size;
     this.player_amount = player_amount;
+    this.piece_offset = piece_offset;
   }
 
   draw(){
@@ -29,8 +31,8 @@ export class OmokBoard {
 
     for (let x = 0; x < this.size; x++){
       this.p.stroke(0);
-      this.p.line((x+.45) * this.piece_size, 0, (x+.45) * this.piece_size, this.p.height); 
-      this.p.line(0, (x+.45) * this.piece_size, this.p.width, (x+.45) * this.piece_size); 
+      this.p.line((x+this.piece_offset) * this.piece_size, 0, (x+this.piece_offset) * this.piece_size, this.p.height); 
+      this.p.line(0, (x+this.piece_offset) * this.piece_size, this.p.width, (x+this.piece_offset) * this.piece_size); 
     }
 
     for (const piece of this.pieces)

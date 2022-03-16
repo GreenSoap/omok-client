@@ -1,15 +1,20 @@
 <main></main>
 <section class="debug-panel">
-  <span id="mouse-pos"></span><br>
+  <span id="mouse-pos"></span>
   <span id="current-piece"></span>
+  <span id="player-turn">Player 1 Turn</span>
 </section>
-
+<style>
+  span{
+    display: block;
+  }
+</style>
 <script lang="ts">
   import p5 from "p5";
   import { OmokBoard } from '../gui/omok_board';  
 
   const omok_board = (p: p5) => {
-    const board: OmokBoard = new OmokBoard(p, 19, 37, 2);
+    const board: OmokBoard = new OmokBoard(p, 19, 37, .5, 2);
 
     p.setup = () => {
       p.createCanvas(700, 700);
@@ -17,12 +22,9 @@
       board.draw();
     }
 
-    p.draw = () => {
-
-    }
-
     p.mouseClicked = (event: any) => { 
       board.place_piece(p.mouseX, p.mouseY);
+      document.getElementById("player-turn").innerText = `Player ${board.current_player+1} Turn`;
     }
     
     p.mouseMoved = (event: any) => {
