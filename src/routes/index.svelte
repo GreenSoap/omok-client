@@ -15,11 +15,13 @@
   }
 </style>
 <script lang="ts">
-  let mouse_coord, piece_coord, player_turn;
-  import p5 from "p5";
-  import { OmokBoard } from '../gui/omok_board';  
 
-  const omok_board = (p: p5) => {
+import p5 from "p5";
+import { OmokBoard } from '../gui/omok_board';  
+
+let mouse_coord, piece_coord, player_turn;
+
+const omok_board = (p: p5) => {
     const board: OmokBoard = new OmokBoard(p, 19, 37, .5, 2);
 
     p.setup = () => {
@@ -39,7 +41,7 @@
       const piece_y = Math.floor(p.mouseY / board.piece_size);
 
       // If mouse is OOB, do not update with current mouse coords
-      if (piece_x > board.size || piece_y > board.size || piece_x < 0 || piece_y < 0){
+      if (piece_x >= board.size || piece_y >= board.size || piece_x < 0 || piece_y < 0){
         piece_coord = `Current piece: `;
         return;
       }
@@ -53,5 +55,4 @@
   }
 
   const myp5 = new p5(omok_board, document.getElementsByTagName("main")[0]);
-  
 </script>
