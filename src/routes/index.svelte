@@ -30,14 +30,20 @@
 
     p.mouseClicked = (event: any) => { 
       const piece_has_been_placed = board.place_piece(p.mouseX, p.mouseY);
-      if (piece_has_been_placed){
+      if (piece_has_been_placed)
         player_turn = `Player ${board.current_player+1} Turn`;
-      }
     }
     
     p.mouseMoved = (event: any) => {
       const piece_x = Math.floor(p.mouseX / board.piece_size);
       const piece_y = Math.floor(p.mouseY / board.piece_size);
+
+      // If mouse is OOB, do not update with current mouse coords
+      if (piece_x > board.size || piece_y > board.size || piece_x < 0 || piece_y < 0){
+        piece_coord = `Current piece: `;
+        return;
+      }
+      
       mouse_coord = `Mouse pos: ${p.mouseX + " " + p.mouseY}`;
       piece_coord = `Current piece: ${piece_x + " " + piece_y}`;
 
