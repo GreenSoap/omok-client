@@ -36,10 +36,10 @@
     }
     
     p.mouseMoved = (event: any) => {
-      const x = Math.floor(p.mouseX / board.piece_size);
-      const y = Math.floor(p.mouseY / board.piece_size);
+      const piece_x = Math.floor(p.mouseX / board.piece_size);
+      const piece_y = Math.floor(p.mouseY / board.piece_size);
       mouse_coord = `Mouse pos: ${p.mouseX + " " + p.mouseY}`;
-      piece_coord = `Current piece: ${x + " " + y}`;
+      piece_coord = `Current piece: ${piece_x + " " + piece_y}`;
 
       board.draw();
       board.highlight_piece_position(p.mouseX, p.mouseY);

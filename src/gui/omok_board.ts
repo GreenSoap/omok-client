@@ -11,7 +11,7 @@ export enum OmokBoardState {
 export class OmokBoard {
   size: number;
   piece_size: number;
-  pieces: Array<OmokPiece> = [];
+  pieces = new Map<string, OmokPiece>();
   current_player = 0;
   player_amount: number;
   piece_offset: number;
@@ -35,8 +35,9 @@ export class OmokBoard {
       this.p.line(0, (x+this.piece_offset) * this.piece_size, this.p.width, (x+this.piece_offset) * this.piece_size); 
     }
 
-    for (const piece of this.pieces)
+    this.pieces.forEach(piece => {
       piece.draw();
+    });
   }
 
   
@@ -45,13 +46,14 @@ export class OmokBoard {
     const piece_x = Math.floor(mouse_x / this.piece_size);
     const piece_y = Math.floor(mouse_y / this.piece_size);
 
-    if (piece_x > this.size || piece_y > this.size ||
+    if (this.pieces.has(`${piece_x},${piece_y}`) ||
+      piece_x > this.size || piece_y > this.size ||
       piece_x < 0 || piece_y < 0)
       return false;
     
-    this.pieces.push(new OmokPiece(this.p, piece_x  * this.piece_size, piece_y  * this.piece_size, this.piece_size, this.current_player));
+    this.pieces.set(`${piece_x},${piece_y}`, new OmokPiece(this.p, piece_x  * this.piece_size, piece_y  * this.piece_size, this.piece_size, this.current_player));
     this.current_player = (this.current_player+1) % this.player_amount;
-    this.pieces[this.pieces.length-1].draw();
+    this.pieces.get(`${piece_x},${piece_y}`).draw();
 
     return true;
   }
