@@ -1,58 +1,42 @@
+
+
 <main>
-  <section class="debug-panel">
-    <span contenteditable="true" bind:textContent={mouse_coord}></span>
-    <span contenteditable="true" bind:textContent={piece_coord}></span>
-    <span contenteditable="true" bind:textContent={player_turn}>Player 1 Turn</span>
-  </section>
+    <header><h1>Edward Omok</h1></header>
+    <svelte:component this={OmokViewModel}></svelte:component>
 </main>
 
-<style>
-  span{
-    display: block;
-  }
-  .debug-panel{
-    user-select: none;
-  }
-</style>
-<script lang="ts">
-
-import p5 from "p5";
-import { OmokBoard } from '../gui/omok_board';  
-
-let mouse_coord, piece_coord, player_turn;
-
-const omok_board = (p: p5) => {
-    const board: OmokBoard = new OmokBoard(p, 19, 37, .5, 2);
-
-    p.setup = () => {
-      p.createCanvas(700, 700);
-      p.frameRate(0);
-      board.draw();
-    }
-
-    p.mouseClicked = (event: any) => { 
-      const piece_has_been_placed = board.place_piece(p.mouseX, p.mouseY);
-      if (piece_has_been_placed)
-        player_turn = `Player ${board.current_player+1} Turn`;
-    }
-    
-    p.mouseMoved = (event: any) => {
-      const piece_x = Math.floor(p.mouseX / board.piece_size);
-      const piece_y = Math.floor(p.mouseY / board.piece_size);
-
-      // If mouse is OOB, do not update with current mouse coords
-      if (piece_x >= board.size || piece_y >= board.size || piece_x < 0 || piece_y < 0){
-        piece_coord = `Current piece: `;
-        return;
-      }
-      
-      mouse_coord = `Mouse pos: ${p.mouseX + " " + p.mouseY}`;
-      piece_coord = `Current piece: ${piece_x + " " + piece_y}`;
-
-      board.draw();
-      board.highlight_piece_position(p.mouseX, p.mouseY);
-    }
-  }
-
-  const myp5 = new p5(omok_board, document.getElementsByTagName("main")[0]);
+<script>
+    import OmokViewModel from "../gui/omok_view_model.svelte";
 </script>
+
+<style>
+
+    @font-face {
+        font-family: 'Pirata One';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url("/PirataOne-Regular.woff2") format('woff2');
+    }
+
+
+    * {
+        margin: 0;
+        border: 0;
+        padding: 0;
+    }
+    main {
+        display: grid;
+        gap: 10px;
+        max-width: 700px;
+        margin: auto;
+        font: normal 20px 'Pirata One', serif; 
+    }
+
+    main > header{
+        text-align: center;
+        font-size: 36px;
+    }
+
+    h1 { font-weight: normal }
+</style>
