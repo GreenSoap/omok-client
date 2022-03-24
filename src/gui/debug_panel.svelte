@@ -1,7 +1,7 @@
 <footer class="debug-panel">
-    <span contenteditable="true" bind:textContent={piece_coord}></span>
-    <span contenteditable="true" bind:textContent={mouse_coord}></span>
-    <span contenteditable="true" bind:textContent={player_turn}></span>
+    <span>Piece: <span contenteditable="true" bind:textContent={piece_coord}></span></span>
+    <span>Mouse: <span contenteditable="true" bind:textContent={mouse_coord}></span></span>
+    <span>Player Turn: <span contenteditable="true" bind:textContent={player_turn}></span></span>
 </footer>
 
 <style>

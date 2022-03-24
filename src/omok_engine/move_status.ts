@@ -1,5 +1,7 @@
-export enum MoveStatus{
+export enum MoveResult{
     INVALID,
-    VICTORY,
-    ILLEGAL
+    VALID,
+    WIN_HORIZONTAL,
+    WIN_VERTICAL,
+    WIN_DIAGONAL
 }

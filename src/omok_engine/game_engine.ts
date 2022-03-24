@@ -1,6 +1,6 @@
 import Player from './player';
 import Board from './board';
-import { MoveStatus } from './move_status';
+import { MoveResult } from './move_status';
 
 export default class OmokGame{
 
@@ -23,7 +23,8 @@ export default class OmokGame{
 
     private create_player(){
         const board = new Board(19);
-        const new_player = new Player(board);
+        const board_inverted = new Board(19);
+        const new_player = new Player(board, board_inverted);
 
         return new_player;
     }
@@ -38,17 +39,17 @@ export default class OmokGame{
     public place_piece(x: number, y: number){
         //check if move is valid
         const is_move_valid = this.is_move_valid(x, y);
-        if (!is_move_valid) return MoveStatus.INVALID;
+        if (!is_move_valid) return MoveResult.INVALID;
 
+        console.log(x, y);
         this.players[this.current_player].place_piece(x, y);
         
-        const is_move_win = this.is_move_win(x, y);
-
+        const move_win_status = this.is_move_win(x, y);
+        console.log('Victory status', this.current_player, move_win_status.valueOf());
         this.current_player = (this.current_player+1) % this.players.length;
 
-        if (is_move_win) return MoveStatus.VICTORY;
-
-        return is_move_valid;
+        
+        return move_win_status;
     }
 
     private is_move_valid(x: number, y: number){
@@ -64,18 +65,32 @@ export default class OmokGame{
 
     private is_move_win(x: number, y: number){
         const player_bitboard = this.players[this.current_player].board.field;
+        const player_bitboard_inverted = this.players[this.current_player].board_inverted.field;
         let is_move_win = false;
-        
-        for (let i = 0; i < player_bitboard.length-2; i++){
-            const row1 = Number(player_bitboard[i].join(""));
-            const row2 = Number(player_bitboard[i+1].join(""));
-            const row3 = Number(player_bitboard[i+2].join(""));
+        is_move_win = this.detect_horizontal_victory(x, y, player_bitboard);
+        if (is_move_win) return MoveResult.WIN_HORIZONTAL;
+        is_move_win = this.detect_horizontal_victory(x, y, player_bitboard_inverted);
+        if (is_move_win) return MoveResult.WIN_VERTICAL;
 
-            is_move_win = ((row1 & row2 & row3) != 0);
-
-            if (is_move_win) break;
-        }
-        console.log(is_move_win);
         return is_move_win;
+    }
+
+    private detect_horizontal_victory(x: number, y: number, bitboard: Array<Array<number>>){
+        let victory = false;
+
+        // loop through x axis
+        for (let i = 0; i < bitboard.length-2; i++){
+            const col1 = (bitboard[i].join("") as unknown as number),
+                  col2 = (bitboard[i+1].join("") as unknown as number),
+                  col3 = (bitboard[i+2].join("") as unknown as number);
+
+            console.log(i, bitboard[i].join(""));
+            
+            victory = ((col1 & col2 & col3) != 0);
+
+            if (victory) break;
+        }
+
+        return victory;
     }
 }
