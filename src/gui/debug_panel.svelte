@@ -1,15 +1,17 @@
-<wired-card class="debug-panel container" elevation="2">
-    <div class="columns col-gapless">
-      <div class="column col-6">
+<wired-card class="debug-panel" elevation="1">
+    <div class="row">
+      <div class="six columns">
         <span>Piece: <span contenteditable="true" bind:textContent={piece_coord}></span></span>
       </div>
-      <div class="column col-6">
+      <div class="six columns">
         <span>Mouse: <span contenteditable="true" bind:textContent={mouse_coord}></span></span>
       </div>
-      <div class="column col-6">
+    </div>
+    <div class="row">
+      <div class="six columns">
         <span>Player Turn: <span contenteditable="true" bind:textContent={player_turn}></span></span>
       </div>
-  </div>
+    </div>
 </wired-card>
 <style>
     :global(.debug-panel){

@@ -1,5 +1,9 @@
 
-<section id="omok-game"></section>
+<section>
+  <wired-card elevation="1" id="omok-game">
+
+  </wired-card>
+</section>
 
 <DebugPanel 
     mouse_coord={mouse_coord} 
@@ -7,9 +11,11 @@
     piece_coord={piece_coord}>
 </DebugPanel>
 <script lang="ts">
+    import "wired-elements";
     import { onMount } from 'svelte';
     import p5 from "p5";
-    import { OmokBoardView } from './omok_board'; 
+    import { OmokBoardView } from './omok_board';
+    import GameChat from './components/game_chat.svelte';
     import DebugPanel from './debug_panel.svelte'; 
     import PlayerLocal from "../multiplayer/player_local";
     import PlayerOnline from "../multiplayer/player_online";
