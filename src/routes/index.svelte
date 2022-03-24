@@ -6,7 +6,8 @@
 </main>
 
 <script>
-    import OmokViewModel from "../gui/omok_view_model.svelte";
+    const OmokViewModel = () => import("../gui/omok_view_model.svelte");
+    
 </script>
 
 <style>
