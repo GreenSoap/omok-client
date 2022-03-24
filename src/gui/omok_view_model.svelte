@@ -16,14 +16,12 @@
     import { onMount } from 'svelte';
     import p5 from "p5";
     import { OmokBoardView } from './omok_board';
-    import GameChat from './components/game_chat.svelte';
     import DebugPanel from './debug_panel.svelte'; 
     import PlayerLocal from "../multiplayer/player_local";
     //import PlayerOnline from "../multiplayer/player_online";
     import OmokGame from "../omok_engine/game_engine";
     import MultiplayerMediator from "../multiplayer/multiplayer_mediator";
     import { MoveResult } from '../omok_engine/move_status';
-    import { onMount } from "svelte";
 
     let player_turn: number, 
         piece_coord: string, 

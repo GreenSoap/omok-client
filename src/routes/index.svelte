@@ -3,14 +3,6 @@
     <wired-card elevation="1">
       <h1>edward omok</h1>
     </wired-card>
-    <svelte:component this={OmokViewModel}></svelte:component>
-</main>
-
-<script>
-  import "wired-elements"
-  import NavigationBar from "../gui/components/navigation_bar.svelte";
-  import OmokViewModel from "../gui/omok_view_model.svelte";
-
     {#if loadedComponent}
         <svelte:component this={loadedComponent} />
     {:else }
@@ -19,7 +11,9 @@
 </main>
 
 <script>
-import { onMount } from "svelte";
+    import "wired-elements"
+    import NavigationBar from "../gui/components/navigation_bar.svelte";
+    import { onMount } from "svelte";
 
     let loadedComponent = null;
     const OmokViewModel = () => import("../gui/omok_view_model.svelte");

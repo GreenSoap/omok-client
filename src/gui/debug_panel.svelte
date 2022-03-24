@@ -13,6 +13,11 @@
         <span>Player Turn: <span contenteditable="true" bind:textContent={player_turn}></span></span>
       </div>
     </div>
+    <div class="row">
+      <div class="six columns">
+        <span>Victory: <span contenteditable="true" bind:textContent={victory_status}></span></span>
+      </div>
+    </div>
 </wired-card>
 
 <style>
@@ -34,5 +39,5 @@
 
 <script lang="ts">
     import "wired-elements";
-    export let mouse_coord, piece_coord, player_turn;
+    export let mouse_coord, piece_coord, player_turn, victory_status;
 </script>

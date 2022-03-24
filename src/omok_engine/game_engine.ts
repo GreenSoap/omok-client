@@ -63,16 +63,21 @@ export default class OmokGame{
     private is_move_win(x: number, y: number){
         const player_bitboard = this.players[this.current_player].board.field;
         const player_bitboard_inverted = this.players[this.current_player].board_inverted.field;
+
         let is_move_win = false;
         is_move_win = this.detect_horizontal_victory(x, y, player_bitboard);
+
         this.victory_status = MoveResult.NULL;
+
         if (is_move_win){
             this.victory_status = MoveResult.WIN_HORIZONTAL;
             return this.victory_status;
         }
+
         is_move_win = this.detect_horizontal_victory(x, y, player_bitboard_inverted);
         if (is_move_win){
             this.victory_status = MoveResult.WIN_VERTICAL;
+            return this.victory_status;
         }
 
         return this.victory_status;
@@ -83,11 +88,9 @@ export default class OmokGame{
 
         // loop through x axis
         for (let i = 0; i < bitboard.length-2; i++){
-            const col1 = (bitboard[i].join("") as unknown as number),
-                  col2 = (bitboard[i+1].join("") as unknown as number),
-                  col3 = (bitboard[i+2].join("") as unknown as number);
-
-            console.log(i, bitboard[i].join(""));
+            const col1 = parseInt(bitboard[i].join(""), 2),
+                  col2 = parseInt(bitboard[i+1].join(""), 2),
+                  col3 = parseInt(bitboard[i+2].join(""), 2);
 
             victory = ((col1 & col2 & col3) != 0);
 
