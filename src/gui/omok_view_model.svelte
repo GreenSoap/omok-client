@@ -4,20 +4,23 @@
 <DebugPanel 
     mouse_coord={mouse_coord} 
     player_turn={player_turn}
-    piece_coord={piece_coord}>
+    piece_coord={piece_coord}
+    victory_status={victory_status}>
 </DebugPanel>
 <script lang="ts">
-    import { onMount } from 'svelte';
     import p5 from "p5";
     import { OmokBoardView } from './omok_board'; 
     import DebugPanel from './debug_panel.svelte'; 
     import PlayerLocal from "../multiplayer/player_local";
-    import PlayerOnline from "../multiplayer/player_online";
+    //import PlayerOnline from "../multiplayer/player_online";
     import OmokGame from "../omok_engine/game_engine";
     import MultiplayerMediator from "../multiplayer/multiplayer_mediator";
+    import type { MoveResult } from 'src/omok_engine/move_status';
+    import { onMount } from "svelte";
     let player_turn: number, 
         piece_coord: string, 
-        mouse_coord: string;
+        mouse_coord: string,
+        victory_status: MoveResult;
 
     onMount(() => {
         const game_instance = new OmokGame();
@@ -25,6 +28,7 @@
 
         mediator.add_player(new PlayerLocal(mediator));
         mediator.add_player(new PlayerLocal(mediator));
+
 
         const omok_board = (p: p5) => {
             const board_size_px = 700;
@@ -50,10 +54,12 @@
                 const piece_has_been_placed = board_gui.place_piece(piece_x, piece_y, game_instance.current_player);
 
                 if (piece_has_been_placed){
-                    mediator.players[game_instance.current_player].make_move({
+                    const move_result = mediator.players[game_instance.current_player].make_move({
                         x: piece_x,
                         y: piece_y
                     });
+
+                    victory_status = move_result;
 
                     player_turn = game_instance.current_player+1;
                 }

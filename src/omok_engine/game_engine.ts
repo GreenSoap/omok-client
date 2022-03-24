@@ -8,6 +8,7 @@ export default class OmokGame{
     current_player = 0;
     player_amount = 2;
     win_condition = 5;
+    victory_status = MoveResult.NULL;
 
     constructor(){
         this.initialize_game();
@@ -41,14 +42,10 @@ export default class OmokGame{
         const is_move_valid = this.is_move_valid(x, y);
         if (!is_move_valid) return MoveResult.INVALID;
 
-        console.log(x, y);
         this.players[this.current_player].place_piece(x, y);
         
         const move_win_status = this.is_move_win(x, y);
-        console.log('Victory status', this.current_player, move_win_status.valueOf());
-        this.current_player = (this.current_player+1) % this.players.length;
-
-        
+        this.current_player = (this.current_player+1) % this.players.length;        
         return move_win_status;
     }
 
@@ -68,11 +65,17 @@ export default class OmokGame{
         const player_bitboard_inverted = this.players[this.current_player].board_inverted.field;
         let is_move_win = false;
         is_move_win = this.detect_horizontal_victory(x, y, player_bitboard);
-        if (is_move_win) return MoveResult.WIN_HORIZONTAL;
+        this.victory_status = MoveResult.NULL;
+        if (is_move_win){
+            this.victory_status = MoveResult.WIN_HORIZONTAL;
+            return this.victory_status;
+        }
         is_move_win = this.detect_horizontal_victory(x, y, player_bitboard_inverted);
-        if (is_move_win) return MoveResult.WIN_VERTICAL;
+        if (is_move_win){
+            this.victory_status = MoveResult.WIN_VERTICAL;
+        }
 
-        return is_move_win;
+        return this.victory_status;
     }
 
     private detect_horizontal_victory(x: number, y: number, bitboard: Array<Array<number>>){
@@ -85,7 +88,7 @@ export default class OmokGame{
                   col3 = (bitboard[i+2].join("") as unknown as number);
 
             console.log(i, bitboard[i].join(""));
-            
+
             victory = ((col1 & col2 & col3) != 0);
 
             if (victory) break;
