@@ -1,8 +1,8 @@
-<header class="debug-panel">
+<footer class="debug-panel">
     <span contenteditable="true" bind:textContent={piece_coord}></span>
     <span contenteditable="true" bind:textContent={mouse_coord}></span>
     <span contenteditable="true" bind:textContent={player_turn}></span>
-</header>
+</footer>
 
 <style>
     .debug-panel{

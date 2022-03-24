@@ -17,4 +17,8 @@ export default class Board{
     public place_piece(x: number, y: number){
         this.bitboard[x][y] = 1;
     }
+
+    get field(){
+        return this.bitboard;
+    }
 }

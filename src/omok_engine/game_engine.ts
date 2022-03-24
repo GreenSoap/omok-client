@@ -1,10 +1,13 @@
 import Player from './player';
 import Board from './board';
+import { MoveStatus } from './move_status';
+
 export default class OmokGame{
 
     players: Array<Player> = [];
     current_player = 0;
     player_amount = 2;
+    win_condition = 5;
 
     constructor(){
         this.initialize_game();
@@ -35,13 +38,16 @@ export default class OmokGame{
     public place_piece(x: number, y: number){
         //check if move is valid
         const is_move_valid = this.is_move_valid(x, y);
-        if (!is_move_valid) return false;
+        if (!is_move_valid) return MoveStatus.INVALID;
 
         this.players[this.current_player].place_piece(x, y);
         
-        //TODO: check for win
-        
-        this.current_player = (this.current_player+1) % this.players.length
+        const is_move_win = this.is_move_win(x, y);
+
+        this.current_player = (this.current_player+1) % this.players.length;
+
+        if (is_move_win) return MoveStatus.VICTORY;
+
         return is_move_valid;
     }
 
@@ -57,6 +63,19 @@ export default class OmokGame{
     }
 
     private is_move_win(x: number, y: number){
+        const player_bitboard = this.players[this.current_player].board.field;
+        let is_move_win = false;
         
+        for (let i = 0; i < player_bitboard.length-2; i++){
+            const row1 = Number(player_bitboard[i].join(""));
+            const row2 = Number(player_bitboard[i+1].join(""));
+            const row3 = Number(player_bitboard[i+2].join(""));
+
+            is_move_win = ((row1 & row2 & row3) != 0);
+
+            if (is_move_win) break;
+        }
+        console.log(is_move_win);
+        return is_move_win;
     }
 }
