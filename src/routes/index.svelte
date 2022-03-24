@@ -2,12 +2,24 @@
 
 <main>
     <header><h1>Edward Omok</h1></header>
-    <svelte:component this={OmokViewModel}></svelte:component>
+    {#if loadedComponent}
+        <svelte:component this={loadedComponent} />
+    {:else }
+        <p>Loading Omok Game...</p>
+    {/if}
 </main>
 
 <script>
+import { onMount } from "svelte";
+
+    let loadedComponent = null;
     const OmokViewModel = () => import("../gui/omok_view_model.svelte");
-    
+
+    onMount(() => {
+        OmokViewModel().then(module => {
+            loadedComponent = module.default;
+        });
+    });
 </script>
 
 <style>
