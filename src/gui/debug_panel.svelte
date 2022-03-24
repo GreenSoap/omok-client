@@ -1,12 +1,22 @@
-<footer class="debug-panel">
-    <span>Piece: <span contenteditable="true" bind:textContent={piece_coord}></span></span>
-    <span>Mouse: <span contenteditable="true" bind:textContent={mouse_coord}></span></span>
-    <span>Player Turn: <span contenteditable="true" bind:textContent={player_turn}></span></span>
-    <span>Victory: <span contenteditable="true" bind:textContent={victory_status}></span></span>
-</footer>
+
+<wired-card class="debug-panel" elevation="1">
+    <div class="row">
+      <div class="six columns">
+        <span>Piece: <span contenteditable="true" bind:textContent={piece_coord}></span></span>
+      </div>
+      <div class="six columns">
+        <span>Mouse: <span contenteditable="true" bind:textContent={mouse_coord}></span></span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="six columns">
+        <span>Player Turn: <span contenteditable="true" bind:textContent={player_turn}></span></span>
+      </div>
+    </div>
+</wired-card>
 
 <style>
-    .debug-panel{
+    :global(.debug-panel){
         user-select: none;
         display: grid;
         font-family: "Visitor";
@@ -23,5 +33,6 @@
 </style>
 
 <script lang="ts">
-    export let mouse_coord, piece_coord, player_turn, victory_status;
+    import "wired-elements";
+    export let mouse_coord, piece_coord, player_turn;
 </script>
