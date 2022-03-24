@@ -8,9 +8,9 @@
 <style>
     .debug-panel{
         user-select: none;
-        display: flex;
-        justify-content: space-between;
+        display: grid;
         font-family: "Visitor";
+        font-size: 15px;
     }
 
     @font-face {

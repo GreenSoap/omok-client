@@ -15,12 +15,13 @@
     //import PlayerOnline from "../multiplayer/player_online";
     import OmokGame from "../omok_engine/game_engine";
     import MultiplayerMediator from "../multiplayer/multiplayer_mediator";
-    import type { MoveResult } from 'src/omok_engine/move_status';
+    import { MoveResult } from '../omok_engine/move_status';
     import { onMount } from "svelte";
+
     let player_turn: number, 
         piece_coord: string, 
         mouse_coord: string,
-        victory_status: MoveResult;
+        victory_status: string;
 
     onMount(() => {
         const game_instance = new OmokGame();
@@ -32,7 +33,6 @@
 
         const omok_board = (p: p5) => {
             const board_size_px = 700;
-
             const board_gui: OmokBoardView = new OmokBoardView(p, 19, 37, .5, 2, board_size_px, "/edward-cullen.jpg");
 
             p.preload = () => {
@@ -59,7 +59,7 @@
                         y: piece_y
                     });
 
-                    victory_status = move_result;
+                    victory_status = MoveResult[move_result];
 
                     player_turn = game_instance.current_player+1;
                 }
