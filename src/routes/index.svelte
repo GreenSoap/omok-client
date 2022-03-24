@@ -10,7 +10,25 @@
   import "wired-elements"
   import NavigationBar from "../gui/components/navigation_bar.svelte";
   import OmokViewModel from "../gui/omok_view_model.svelte";
-    
+
+    {#if loadedComponent}
+        <svelte:component this={loadedComponent} />
+    {:else }
+        <p>Loading Omok Game...</p>
+    {/if}
+</main>
+
+<script>
+import { onMount } from "svelte";
+
+    let loadedComponent = null;
+    const OmokViewModel = () => import("../gui/omok_view_model.svelte");
+
+    onMount(() => {
+        OmokViewModel().then(module => {
+            loadedComponent = module.default;
+        });
+    });
 
 </script>
 

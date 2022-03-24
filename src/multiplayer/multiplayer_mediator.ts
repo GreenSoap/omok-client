@@ -11,6 +11,6 @@ export default class MultiplayerMediator{
     };
 
     make_move(move: IMultiplayerGameMove){
-        this.game_instance.place_piece(move.x, move.y);
+        return this.game_instance.place_piece(move.x, move.y);
     };
 }

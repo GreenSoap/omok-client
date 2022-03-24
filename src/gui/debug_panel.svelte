@@ -1,3 +1,4 @@
+
 <wired-card class="debug-panel" elevation="1">
     <div class="row">
       <div class="six columns">
@@ -13,11 +14,13 @@
       </div>
     </div>
 </wired-card>
+
 <style>
     :global(.debug-panel){
         user-select: none;
+        display: grid;
         font-family: "Visitor";
-        padding: 16px;
+        font-size: 15px;
     }
 
     @font-face {
