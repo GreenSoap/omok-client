@@ -35,6 +35,22 @@
         src: url("/PirataOne-Regular.woff2") format('woff2');
     }
 
+    @font-face {
+        font-family: 'Gloria Hallelujah';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url("/GloriaHallelujah.woff2") format('woff2');
+    }
+
+    @font-face {
+        font-family: 'Visitor';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url("/Visitor.woff2") format('woff2');
+    }
+
     * {
         margin: 0;
         border: 0;

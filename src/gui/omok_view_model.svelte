@@ -80,8 +80,8 @@
                     return;
                 }
             
-                mouse_coord = p.mouseX + " " + p.mouseY;
-                piece_coord = piece_x + " " + piece_y;
+                mouse_coord = "[" + Math.round(p.mouseX) + ", " + Math.round(p.mouseY) + "]";
+                piece_coord = "[" + piece_x + ", " + piece_y + "]";
 
                 board_gui.draw();
                 board_gui.highlight_piece_position(p.mouseX, p.mouseY);
