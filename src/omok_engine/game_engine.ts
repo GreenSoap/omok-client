@@ -59,14 +59,14 @@ export default class OmokGame{
     private is_move_win(x: number, y: number){
         // check columns
         const move_result = this.detect_victory(x, y, this.players[this.current_player].board.field, true);        
-        if (move_result != MoveResult.NULL){
+        if (move_result !== MoveResult.NULL){
             this.victory_status = move_result;
             return this.victory_status;
         }
 
         // check rows
-        const move_inverted_result = this.detect_victory(x, y, this.players[this.current_player].board_inverted.field);
-        if (move_inverted_result != MoveResult.NULL)
+        const move_inverted_result = this.detect_victory(x, y, this.players[this.current_player].board_inverted.field, false);
+        if (move_inverted_result !== MoveResult.NULL)
             this.victory_status = move_inverted_result;
         
         return this.victory_status;
@@ -76,30 +76,36 @@ export default class OmokGame{
         let victory = false;
 
         // loop through x axis
-        for (let i = 0; i < bitboard.length-2; i++){
+        for (let i = 0; i < bitboard.length-4; i++){
             const col1 = parseInt(bitboard[i].join(""), 2),
                   col2 = parseInt(bitboard[i+1].join(""), 2),
-                  col3 = parseInt(bitboard[i+2].join(""), 2);
+                  col3 = parseInt(bitboard[i+2].join(""), 2),
+                  col4 = parseInt(bitboard[i+3].join(""), 2),
+                  col5 = parseInt(bitboard[i+4].join(""), 2);
 
-            victory = ((col1 & col2 & col3) != 0);
+            victory = ((col1 & col2 & col3 & col4 & col5) != 0);
 
             if (victory) 
                 return MoveResult.WIN_STRAIGHT;
 
-            if (!check_diagonals) 
+            if (!check_diagonals)
                 continue;
 
             const col2_left_shift = col2 << 1,
-                  col3_left_shift = col3 << 2;
+                  col3_left_shift = col3 << 2,
+                  col4_left_shift = col4 << 3,
+                  col5_left_shift = col5 << 4;
 
-            victory = ((col1 & col2_left_shift & col3_left_shift) != 0);
+            victory = ((col1 & col2_left_shift & col3_left_shift & col4_left_shift & col5_left_shift) != 0);
             if (victory) 
                 return MoveResult.WIN_DIAGONAL_LEFT;
 
             const col2_right_shift = col2 >> 1,
-                  col3_right_shift = col3 >> 2;
+                  col3_right_shift = col3 >> 2,
+                  col4_right_shift = col4 >> 3,
+                  col5_right_shift = col5 >> 4;
 
-            victory = ((col1 & col2_right_shift & col3_right_shift) != 0);
+            victory = ((col1 & col2_right_shift & col3_right_shift & col4_right_shift & col5_right_shift) != 0);
             if (victory) 
                 return MoveResult.WIN_DIAGONAL_RIGHT;
         }

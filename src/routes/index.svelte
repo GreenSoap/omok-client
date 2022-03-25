@@ -2,7 +2,7 @@
 
 <main>
     <wired-card elevation="1">
-        <h1>edward omok</h1>
+        <h1>omok.io</h1>
     </wired-card>
     {#if loadedComponent}
         <svelte:component this={loadedComponent} />
