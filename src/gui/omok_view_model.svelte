@@ -25,7 +25,7 @@
     import rough from "roughjs";
     import { OmokBoardView } from './omok_board';
     import DebugPanel from './debug_panel.svelte'; 
-    import PlayerLocal from "../multiplayer/player_local";
+    import LocalPlayer from "../multiplayer/player/local_player";
     //import PlayerOnline from "../multiplayer/player_online";
     import OmokGame from "../omok_engine/game_engine";
     import MultiplayerMediator from "../multiplayer/multiplayer_mediator";
@@ -43,8 +43,8 @@
         const game_instance = new OmokGame();
         const mediator = new MultiplayerMediator(game_instance);
 
-        mediator.add_player(new PlayerLocal(mediator));
-        mediator.add_player(new PlayerLocal(mediator));
+        mediator.add_player(new LocalPlayer(mediator));
+        mediator.add_player(new LocalPlayer(mediator));
 
 
         const omok_board = (p: p5) => {
