@@ -1,7 +1,7 @@
 import type IMove from "../i_move";
-import MultiplayerPlayer from "./multiplayer_player";
+import BasePlayer from "./base_player"
 
-export default class LocalPlayer extends MultiplayerPlayer{
+export default class LocalPlayer extends BasePlayer{
     make_move(move: IMove) {
         return this.lobby.make_move(this, move);
     }
