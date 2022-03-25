@@ -7,7 +7,10 @@
     {#if loadedComponent}
         <svelte:component this={loadedComponent} />
     {:else }
-        <p>Loading Omok Game...</p>
+        <section class="loading-screen">
+            <wired-spinner spinning id="sp"></wired-spinner>
+            <p>Loading Omok Game...</p>
+        </section>
     {/if}
 </main>
 
