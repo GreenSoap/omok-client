@@ -1,20 +1,29 @@
 
 <section class="omok-game-instance">
     <wired-card elevation="1" id="omok-game"></wired-card>
-    <DebugPanel 
-            mouse_coord={mouse_coord} 
-            player_turn={player_turn}
-            piece_coord={piece_coord}
-            victory_status={victory_status}>
-    </DebugPanel>
+    <div class="game-side-panel">
+        <DebugPanel 
+                mouse_coord={mouse_coord} 
+                player_turn={player_turn}
+                piece_coord={piece_coord}
+                victory_status={victory_status}>
+        </DebugPanel>
+        <ChatRoom></ChatRoom>
+    </div>
 </section>
 
 <style lang="scss">
     .omok-game-instance{
         display: grid;
-        grid-auto-rows: 1fr 2fr;
-        grid-template-columns: 0fr 1fr;
-        align-items: start;
+        grid-auto-columns: 0fr 1fr;
+        grid-auto-rows: 0fr 1fr;
+
+        .game-side-panel{
+            grid-row: 1;
+            grid-column: 2; 
+            display: grid;
+            grid-auto-rows: 0fr 1fr;
+        }
     }
 </style>
 
@@ -24,6 +33,8 @@
     import p5 from "p5";
     import rough from "roughjs";
     import { OmokBoardView } from './omok_board';
+    import ChatRoom from './components/chat_room.svelte';
+
     import DebugPanel from './debug_panel.svelte'; 
     import OmokGame from "../omok_engine/game_engine";
     import { MoveResult } from '../omok_engine/move_status';

@@ -12,8 +12,8 @@
 </main>
 
 <footer>
-    <span>
-        <strong>omok-client</strong> | 
+    <span class="footer-info">
+        <strong>omok.io</strong> | <em>by william and joshua</em> | 
         <a href="https://github.com/GreenSoap/omok-client"><Fa icon={faGithub}></Fa>  Github</a>
     </span>
 </footer>
@@ -102,9 +102,13 @@
 
     footer {
         display: flex;
-        justify-content: center;
+        justify-content: right;
         padding: 15px;
         font-size: 18px;
+    }
+
+    .footer-info > *{
+        margin: 0 10px;
     }
 
     h1 { font-weight: normal; font-size: 3.5em; }
