@@ -2,7 +2,7 @@ import Player from './player';
 import { MoveResult } from './move_status';
 
 export default class OmokGame{
-
+    board_size = 19;
     players: Array<Player> = [];
     current_player = 0;
     player_amount = 2;
@@ -22,7 +22,7 @@ export default class OmokGame{
     }
 
     private create_player(){
-        const new_player = new Player(19);
+        const new_player = new Player(this.board_size);
         return new_player;
     }
 
