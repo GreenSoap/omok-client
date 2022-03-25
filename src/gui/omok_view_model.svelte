@@ -1,16 +1,23 @@
 
-<section>
-  <wired-card elevation="1" id="omok-game">
-
-  </wired-card>
+<section class="omok-game-instance">
+    <wired-card elevation="1" id="omok-game"></wired-card>
+    <DebugPanel 
+            mouse_coord={mouse_coord} 
+            player_turn={player_turn}
+            piece_coord={piece_coord}
+            victory_status={victory_status}>
+    </DebugPanel>
 </section>
 
-<DebugPanel 
-    mouse_coord={mouse_coord} 
-    player_turn={player_turn}
-    piece_coord={piece_coord}
-    victory_status={victory_status}>
-</DebugPanel>
+<style lang="scss">
+    .omok-game-instance{
+        display: grid;
+        grid-auto-rows: 1fr 2fr;
+        grid-template-columns: 0fr 1fr;
+        align-items: start;
+    }
+</style>
+
 <script lang="ts">
     import "wired-elements";
     import { onMount } from 'svelte';

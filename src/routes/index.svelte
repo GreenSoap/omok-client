@@ -1,7 +1,8 @@
 <NavigationBar></NavigationBar>
+
 <main>
     <wired-card elevation="1">
-      <h1>edward omok</h1>
+        <h1>edward omok</h1>
     </wired-card>
     {#if loadedComponent}
         <svelte:component this={loadedComponent} />
@@ -58,14 +59,15 @@
     main {
         display: grid;
         gap: 10px;
-        max-width: 700px;
+        max-width: 1200px;
         margin: auto;
     }
 
     main > wired-card{
         text-align: center;
         font-size: 36px;
-        padding: 16px;
+        padding: 10px;
+        opacity: 1;
     }
 
     h1 { font-weight: normal }
