@@ -1,35 +1,55 @@
 
 <wired-card class="debug-panel" elevation="1">
-    <div class="row">
-      <div class="six columns">
-        <span>Piece: <span contenteditable="true" bind:textContent={piece_coord}></span></span>
-      </div>
-      <div class="six columns">
-        <span>Mouse: <span contenteditable="true" bind:textContent={mouse_coord}></span></span>
-      </div>
+  <header>
+    <h3>Debug Panel</h3>
+    <wired-button on:click={handle_closer_click}>Close</wired-button>
+  </header>
+  <section id="debug-values">
+    <div>
+      <span>Piece: <em contenteditable="true" bind:textContent={piece_coord}></em></span>
+      <span>Mouse: <em contenteditable="true" bind:textContent={mouse_coord}></em></span>
     </div>
-    <div class="row">
-      <div class="six columns">
-        <span>Player Turn: <span contenteditable="true" bind:textContent={player_turn}></span></span>
-      </div>
+    <div>
+      <span>Player Turn: <strong contenteditable="true" bind:textContent={player_turn}></strong></span>
+      <span>Victory: <em contenteditable="true" bind:textContent={victory_status}></em></span>
     </div>
-    <div class="row">
-      <div class="six columns">
-        <span>Victory: <span contenteditable="true" bind:textContent={victory_status}></span></span>
-      </div>
-    </div>
+  </section>
 </wired-card>
 
-<style>
-    :global(.debug-panel){
-        user-select: none;
-        display: grid;
-        font-family: "Visitor";
-        font-size: 15px;
+<style lang="scss">
+    .debug-panel {
+        wired-button{
+          background: #ff7979;
+        }
+
+        header{
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 15px; 
+          margin: 0 0 0 5px;
+        }
+
+        div {
+          display: flex;
+          justify-content: space-evenly;
+        }
+
+        h3{
+          font-size: 15px; 
+        }
     }
 </style>
 
 <script lang="ts">
     import "wired-elements";
     export let mouse_coord, piece_coord, player_turn, victory_status;
+
+    let is_open = false;
+    const handle_closer_click = (evt: Event) => {
+      (evt.target as HTMLButtonElement).textContent = (is_open) ? 'Close' : 'Open';
+      document.getElementById('debug-values').style.display = (is_open) ? 'block' : 'none';
+
+      is_open = !is_open;      
+    }
 </script>

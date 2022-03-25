@@ -1,6 +1,6 @@
 <nav>
   <ul>
-    <li><wired-button>Home</wired-button></li>
+    <li><wired-button elevation="2">Home</wired-button></li>
   </ul>
 </nav>
 

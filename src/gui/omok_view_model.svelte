@@ -15,6 +15,7 @@
     import "wired-elements";
     import { onMount } from 'svelte';
     import p5 from "p5";
+    import rough from "roughjs";
     import { OmokBoardView } from './omok_board';
     import DebugPanel from './debug_panel.svelte'; 
     import PlayerLocal from "../multiplayer/player_local";
@@ -28,6 +29,9 @@
         mouse_coord: string,
         victory_status: string;
 
+    let last_piece_y: number;
+    let last_piece_x: number;
+
     onMount(() => {
         const game_instance = new OmokGame();
         const mediator = new MultiplayerMediator(game_instance);
@@ -40,6 +44,8 @@
             const board_size_px = 700;
             const board_gui: OmokBoardView = new OmokBoardView(p, 19, 37, .5, 2, board_size_px, "/edward-cullen.jpg");
 
+            let rough_canvas;
+
             p.preload = () => {
                 board_gui.preload();
             }
@@ -48,9 +54,12 @@
                 const canvas = p.createCanvas(board_size_px, board_size_px);
                 canvas.parent("omok-game");
                 p.frameRate(0);
+                rough_canvas = rough.canvas(document.getElementById("defaultCanvas0") as HTMLCanvasElement);
+                board_gui.rough_canvas = rough_canvas;
+                player_turn = game_instance.current_player+1;
+
                 board_gui.draw();
 
-                player_turn = game_instance.current_player+1;
             }
 
             p.mouseClicked = () => { 
@@ -72,6 +81,9 @@
             
             p.mouseMoved = () => {
                 const [piece_x, piece_y] = board_gui.get_piece_coordinate(p.mouseX, p.mouseY);
+                
+                if (last_piece_y == piece_y && last_piece_x == piece_x) 
+                    return; 
 
                 // If mouse is OOB, do not update with current mouse coords
                 if (piece_x >= board_gui.size || piece_y >= board_gui.size || piece_x < 0 || piece_y < 0){
@@ -85,6 +97,9 @@
 
                 board_gui.draw();
                 board_gui.highlight_piece_position(p.mouseX, p.mouseY);
+
+                last_piece_y = piece_y;
+                last_piece_x = piece_x;
             }
         }
 

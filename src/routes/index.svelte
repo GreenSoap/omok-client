@@ -51,23 +51,20 @@
         src: url("/Visitor.woff2") format('woff2');
     }
 
-    * {
-        margin: 0;
-        border: 0;
-        padding: 0;
+    :global(body){
+        font: normal 15px 'Gloria Hallelujah', serif; 
     }
+
     main {
         display: grid;
         gap: 10px;
         max-width: 700px;
         margin: auto;
-        font: normal 20px 'Pirata One', serif; 
     }
 
     main > wired-card{
         text-align: center;
         font-size: 36px;
-        font-family: "Gloria Hallelujah", cursive;
         padding: 16px;
     }
 
