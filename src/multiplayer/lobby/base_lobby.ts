@@ -18,6 +18,7 @@ export default abstract class Lobby extends EventTarget {
   constructor(public game_instance: OmokGame){
     super();
     game_instance.addEventListener(GameEngineEvent.GAME_START, () => this.start());
+    game_instance.addEventListener(GameEngineEvent.NEW_TURN, () => this.request_next_move());
   }
 
   start() {
@@ -40,11 +41,12 @@ export default abstract class Lobby extends EventTarget {
     console.log(`${player.id} made move: ${move.x}, ${move.y}`);
     const move_result =  this.game_instance.place_piece(move.x, move.y);
 
-    if (move_result == MoveResult.VALID) {
-      this.dispatchEvent(this.player_turn_events[this.game_instance.current_player]);
-    }
-
     return move_result;
+  }
+
+  private request_next_move(){
+    console.log("requesting next move...");
+    this.dispatchEvent(this.player_turn_events[this.game_instance.current_player]);
   }
 }
 

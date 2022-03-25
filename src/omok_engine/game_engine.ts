@@ -37,24 +37,24 @@ export default class OmokGame extends EventTarget {
     }
 
     public place_piece(x: number, y: number){
-        //check if move is valid
-        this.victory_status = this.is_move_valid(x, y) ? MoveResult.VALID : MoveResult.INVALID;
-        if (this.victory_status === MoveResult.INVALID) return MoveResult.INVALID;
+      //check if move is valid
+      this.victory_status = this.is_move_valid(x, y) ? MoveResult.VALID : MoveResult.INVALID;
+      if (this.victory_status === MoveResult.INVALID) return MoveResult.INVALID;
 
-        this.players[this.current_player].place_piece(x, y);
-        
-        this.dispatch_piece_placed_event(x, y);
-        
-        const move_win_status = this.is_move_win(x, y);
-        this.current_player = (this.current_player+1) % this.players.length;       
-        
-        if (move_win_status === MoveResult.WIN_DIAGONAL_LEFT ||
-            move_win_status === MoveResult.WIN_DIAGONAL_RIGHT ||
-            move_win_status === MoveResult.WIN_STRAIGHT){
-                this.dispatch_game_over_event();
-            }
-
-        return move_win_status;
+      this.players[this.current_player].place_piece(x, y);
+      this.dispatch_piece_placed_event(x, y);
+      
+      const move_win_status = this.is_move_win(x, y);
+      this.current_player = (this.current_player+1) % this.players.length;
+      
+      if (move_win_status === MoveResult.WIN_DIAGONAL_LEFT ||
+        move_win_status === MoveResult.WIN_DIAGONAL_RIGHT ||
+        move_win_status === MoveResult.WIN_STRAIGHT){
+          this.dispatch_game_over_event();
+      }
+          
+      this.dispatch_new_turn_event();
+      return move_win_status;
     }
 
     private is_move_valid(x: number, y: number){
@@ -127,11 +127,11 @@ export default class OmokGame extends EventTarget {
 
     private dispatch_piece_placed_event(x: number, y: number){
         this.dispatchEvent(new CustomEvent(GameEngineEvent.PIECE_PLACED, {
-            detail: {
-                x,
-                y,
-                player_id: this.current_player
-            }
+          detail: {
+            x,
+            y,
+            player_id: this.current_player
+          }
         }));
     }
 
@@ -149,6 +149,14 @@ export default class OmokGame extends EventTarget {
         detail: {
           player_amount: this.player_amount
         }
+      }));
+    }
+    
+    private dispatch_new_turn_event(){
+      this.dispatchEvent(new CustomEvent(GameEngineEvent.NEW_TURN, {
+          detail: {
+            player_id: this.current_player
+          }
       }));
     }
 }
