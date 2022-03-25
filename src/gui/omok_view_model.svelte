@@ -135,14 +135,13 @@
 
     const omok_board = (_p: p5) => {
       p = _p;
-      board_gui = new OmokBoardView(p, 19, 37, .5, 2, board_size_px, "/edward-cullen.jpg");
-
       p.preload = preload;
       p.setup = setup;
       p.mouseClicked = mouse_clicked;
       p.mouseMoved = mouseMoved;
+      board_gui = new OmokBoardView(p, 19, 37, .5, 2, board_size_px, "/edward-cullen.jpg");
     }
 
-    const myp5 = new p5(omok_board);
+    const _ = new p5(omok_board);
   });
 </script>
