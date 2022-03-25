@@ -25,14 +25,24 @@ export default abstract class Lobby extends EventTarget {
 
   add_player(player: BasePlayer){
     this.players.push(player);
-    this.player_turn_events.push(new Event(`${player.id}_turn`));
+
+    // Create and attach turn event listeners
+    const event_type_name = `${player.id}_turn`;
+    this.player_turn_events.push(new Event(event_type_name));
+    this.addEventListener(event_type_name, () => player.schedule_move());
   };
 
   make_move(player: BasePlayer, move: IMove): MoveResult {
     if (this.game_instance.current_player != player.id) return MoveResult.INVALID;
 
     console.log(`${player.id} made move: ${move.x}, ${move.y}`);
-    return this.game_instance.place_piece(move.x, move.y);
+    const move_result =  this.game_instance.place_piece(move.x, move.y);
+
+    if (move_result == MoveResult.VALID) {
+      this.dispatchEvent(this.player_turn_events[this.game_instance.current_player]);
+    }
+
+    return move_result;
   }
 }
 

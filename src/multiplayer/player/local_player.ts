@@ -10,4 +10,9 @@ export default class LocalPlayer extends BasePlayer{
   make_move(move: IMove) {
       return this.lobby.make_move(this, move);
   }
+
+  schedule_move() {
+    // do nothing for local player
+    console.log(`${this.id} turn`);
+  }
 }
