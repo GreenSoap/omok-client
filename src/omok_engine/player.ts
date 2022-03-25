@@ -1,13 +1,12 @@
-import type Board from "./board";
+import Board from "./board";
 
 export default class Player{
-
     public board: Board;
     public board_inverted: Board;
 
-    constructor(board: Board, board_inverted: Board){
-        this.board = board;
-        this.board_inverted = board_inverted;
+    constructor(board_size: number){
+        this.board = new Board(board_size);
+        this.board_inverted = new Board(board_size);
     }
 
     public place_piece(x: number, y: number): void{

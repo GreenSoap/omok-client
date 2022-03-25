@@ -2,7 +2,7 @@ export enum MoveResult{
     NULL,
     INVALID,
     VALID,
-    WIN_HORIZONTAL,
-    WIN_VERTICAL,
-    WIN_DIAGONAL
+    WIN_STRAIGHT,
+    WIN_DIAGONAL_LEFT,
+    WIN_DIAGONAL_RIGHT
 }

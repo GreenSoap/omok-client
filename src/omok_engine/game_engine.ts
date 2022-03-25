@@ -1,5 +1,4 @@
 import Player from './player';
-import Board from './board';
 import { MoveResult } from './move_status';
 
 export default class OmokGame{
@@ -19,14 +18,11 @@ export default class OmokGame{
     }
 
     public start_game(){
-        
+        return;
     }
 
     private create_player(){
-        const board = new Board(19);
-        const board_inverted = new Board(19);
-        const new_player = new Player(board, board_inverted);
-
+        const new_player = new Player(19);
         return new_player;
     }
 
@@ -61,29 +57,22 @@ export default class OmokGame{
     }
 
     private is_move_win(x: number, y: number){
-        const player_bitboard = this.players[this.current_player].board.field;
-        const player_bitboard_inverted = this.players[this.current_player].board_inverted.field;
-
-        let is_move_win = false;
-        is_move_win = this.detect_horizontal_victory(x, y, player_bitboard);
-
-        this.victory_status = MoveResult.NULL;
-
-        if (is_move_win){
-            this.victory_status = MoveResult.WIN_HORIZONTAL;
+        // check columns
+        const move_result = this.detect_victory(x, y, this.players[this.current_player].board.field, true);        
+        if (move_result != MoveResult.NULL){
+            this.victory_status = move_result;
             return this.victory_status;
         }
 
-        is_move_win = this.detect_horizontal_victory(x, y, player_bitboard_inverted);
-        if (is_move_win){
-            this.victory_status = MoveResult.WIN_VERTICAL;
-            return this.victory_status;
-        }
-
+        // check rows
+        const move_inverted_result = this.detect_victory(x, y, this.players[this.current_player].board_inverted.field);
+        if (move_inverted_result != MoveResult.NULL)
+            this.victory_status = move_inverted_result;
+        
         return this.victory_status;
     }
 
-    private detect_horizontal_victory(x: number, y: number, bitboard: Array<Array<number>>){
+    private detect_victory(x: number, y: number, bitboard: Array<Array<number>>, check_diagonals = false){
         let victory = false;
 
         // loop through x axis
@@ -94,9 +83,27 @@ export default class OmokGame{
 
             victory = ((col1 & col2 & col3) != 0);
 
-            if (victory) break;
+            if (victory) 
+                return MoveResult.WIN_STRAIGHT;
+
+            if (!check_diagonals) 
+                continue;
+
+            const col2_left_shift = col2 << 1,
+                  col3_left_shift = col3 << 2;
+
+            victory = ((col1 & col2_left_shift & col3_left_shift) != 0);
+            if (victory) 
+                return MoveResult.WIN_DIAGONAL_LEFT;
+
+            const col2_right_shift = col2 >> 1,
+                  col3_right_shift = col3 >> 2;
+
+            victory = ((col1 & col2_right_shift & col3_right_shift) != 0);
+            if (victory) 
+                return MoveResult.WIN_DIAGONAL_RIGHT;
         }
 
-        return victory;
+        return MoveResult.NULL;
     }
 }
