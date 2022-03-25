@@ -20,7 +20,8 @@ export default class OmokGame extends EventTarget {
     }
 
     public start_game(){
-        return;
+      this.dispatch_game_start_event();
+      return;
     }
 
     private create_player(){
@@ -135,11 +136,19 @@ export default class OmokGame extends EventTarget {
     }
 
     private dispatch_game_over_event(){
-        this.dispatchEvent(new CustomEvent(GameEngineEvent.GAME_OVER, {
-            detail: {
-                player_id: this.current_player,
-                victory_result: this.victory_status
-            }
-        }));
+      this.dispatchEvent(new CustomEvent(GameEngineEvent.GAME_OVER, {
+        detail: {
+          player_id: this.current_player,
+          victory_result: this.victory_status
+        }
+      }));
+    }
+
+    private dispatch_game_start_event(){
+      this.dispatchEvent(new CustomEvent(GameEngineEvent.GAME_START, {
+        detail: {
+          player_amount: this.player_amount
+        }
+      }));
     }
 }

@@ -67,7 +67,8 @@
         lobby = LobbyFactory.create_lobby(game_instance, LobbyType.LOCAL);
         game_instance.addEventListener(GameEngineEvent.PIECE_PLACED, piece_placed);
         game_instance.addEventListener(GameEngineEvent.GAME_OVER, game_over);
-        lobby.start();
+
+        game_instance.start_game();
     }
   
     const piece_placed = (event: CustomEvent) => {
