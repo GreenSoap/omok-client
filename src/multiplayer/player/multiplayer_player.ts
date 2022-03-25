@@ -1,9 +1,9 @@
-import type IMultiplayerMediator from "src/multiplayer/multiplayer_mediator";
+import type MultiplayerLobby from "src/multiplayer/multiplayer_lobby";
 import type { MoveResult } from "src/omok_engine/move_status";
 import type IMove from "../i_move";
 
 export default abstract class MultiplayerPlayer {
-    constructor(protected mediator: IMultiplayerMediator){
+    constructor(protected lobby: MultiplayerLobby){
         
     }
 

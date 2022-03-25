@@ -28,7 +28,7 @@
     import LocalPlayer from "../multiplayer/player/local_player";
     //import PlayerOnline from "../multiplayer/player_online";
     import OmokGame from "../omok_engine/game_engine";
-    import MultiplayerMediator from "../multiplayer/multiplayer_mediator";
+    import MultiplayerLobby from "../multiplayer/multiplayer_lobby";
     import { MoveResult } from '../omok_engine/move_status';
 
     let player_turn: number, 
@@ -41,10 +41,10 @@
 
     onMount(() => {
         const game_instance = new OmokGame();
-        const mediator = new MultiplayerMediator(game_instance);
+        const lobby = new MultiplayerLobby(game_instance);
 
-        mediator.add_player(new LocalPlayer(mediator));
-        mediator.add_player(new LocalPlayer(mediator));
+        lobby.add_player(new LocalPlayer(lobby));
+        lobby.add_player(new LocalPlayer(lobby));
 
 
         const omok_board = (p: p5) => {
@@ -75,7 +75,7 @@
                 const piece_has_been_placed = board_gui.place_piece(piece_x, piece_y, game_instance.current_player);
 
                 if (piece_has_been_placed){
-                    const move_result = mediator.players[game_instance.current_player].make_move({
+                    const move_result = lobby.players[game_instance.current_player].make_move({
                         x: piece_x,
                         y: piece_y
                     });
