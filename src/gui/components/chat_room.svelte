@@ -33,7 +33,6 @@
           <p>Hello my name is Joshua xDxD</p>
         </article>
       </li>
-
     </ol>
   </wired-card>
 <section class="input-area">
