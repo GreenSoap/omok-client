@@ -1,7 +1,7 @@
 import type OmokGame from "src/omok_engine/game_engine";
-import Lobby, { LobbyType } from "./lobby/base_lobby";
-import LocalLobby from "./lobby/local_lobby";
-import LocalPlayer from "./player/local_player";
+import Lobby, { LobbyType } from "./base_lobby";
+import LocalLobby from "./local_lobby";
+import LocalPlayer from "../player/local_player";
 
 export default class LobbyFactory {
   static create_lobby(game_instance: OmokGame, lobby_type: LobbyType): Lobby {

@@ -29,7 +29,7 @@
     //import PlayerOnline from "../multiplayer/player_online";
     import OmokGame from "../omok_engine/game_engine";
     import { MoveResult } from '../omok_engine/move_status';
-    import LobbyFactory from "../multiplayer/lobby_factory";
+    import LobbyFactory from "../multiplayer/lobby/lobby_factory";
     import { LobbyType } from "../multiplayer/lobby/base_lobby";
 
     let player_turn: number, 
