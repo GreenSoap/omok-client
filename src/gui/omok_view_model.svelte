@@ -25,11 +25,12 @@
     import rough from "roughjs";
     import { OmokBoardView } from './omok_board';
     import DebugPanel from './debug_panel.svelte'; 
-    import PlayerLocal from "../multiplayer/player_local";
+    import LocalPlayer from "../multiplayer/player/local_player";
     //import PlayerOnline from "../multiplayer/player_online";
     import OmokGame from "../omok_engine/game_engine";
-    import MultiplayerMediator from "../multiplayer/multiplayer_mediator";
     import { MoveResult } from '../omok_engine/move_status';
+    import LobbyFactory from "../multiplayer/lobby/lobby_factory";
+    import { LobbyType } from "../multiplayer/lobby/base_lobby";
 
     let player_turn: number, 
         piece_coord: string, 
@@ -41,11 +42,7 @@
 
     onMount(() => {
         const game_instance = new OmokGame();
-        const mediator = new MultiplayerMediator(game_instance);
-
-        mediator.add_player(new PlayerLocal(mediator));
-        mediator.add_player(new PlayerLocal(mediator));
-
+        const lobby = LobbyFactory.create_lobby(game_instance, LobbyType.LOCAL);
 
         const omok_board = (p: p5) => {
             const board_size_px = 700;
@@ -75,7 +72,7 @@
                 const piece_has_been_placed = board_gui.place_piece(piece_x, piece_y, game_instance.current_player);
 
                 if (piece_has_been_placed){
-                    const move_result = mediator.players[game_instance.current_player].make_move({
+                    const move_result = lobby.players[game_instance.current_player].make_move({
                         x: piece_x,
                         y: piece_y
                     });
