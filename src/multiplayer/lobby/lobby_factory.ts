@@ -9,8 +9,8 @@ export default class LobbyFactory {
     switch (lobby_type) {
       case LobbyType.LOCAL:
         lobby = new LocalLobby(game_instance);
-        lobby.add_player(new LocalPlayer(lobby));
-        lobby.add_player(new LocalPlayer(lobby));
+        lobby.add_player(new LocalPlayer(lobby, 0));
+        lobby.add_player(new LocalPlayer(lobby, 1));
         break;
       default:
         console.error(`Lobby type ${lobby_type} not supported`);
