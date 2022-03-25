@@ -4,9 +4,9 @@
     <h3>Debug Panel</h3>
     <wired-button on:click={handle_closer_click}>
       {#if is_open}
-      <Fa icon={faCaretDown}></Fa>
-      {:else}
       <Fa icon={faCaretUp}></Fa>
+      {:else}
+      <Fa icon={faCaretDown}></Fa>
       {/if}
     </wired-button>
   </header>
