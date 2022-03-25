@@ -1,7 +1,8 @@
 import Player from './player';
 import { MoveResult } from './move_status';
+import { GameEngineEvent } from './game_events';
 
-export default class OmokGame{
+export default class OmokGame extends EventTarget {
     board_size = 19;
     players: Array<Player> = [];
     current_player = 0;
@@ -10,7 +11,8 @@ export default class OmokGame{
     victory_status = MoveResult.NULL;
 
     constructor(){
-        this.initialize_game();
+      super();
+      this.initialize_game();
     }
 
     private initialize_game(){
@@ -39,6 +41,9 @@ export default class OmokGame{
         if (this.victory_status === MoveResult.INVALID) return MoveResult.INVALID;
 
         this.players[this.current_player].place_piece(x, y);
+        //
+        this.dispatchEvent(new Event(GameEngineEvent.PIECE_PLACED));
+        //
         
         const move_win_status = this.is_move_win(x, y);
         this.current_player = (this.current_player+1) % this.players.length;        

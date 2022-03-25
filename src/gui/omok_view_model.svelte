@@ -40,6 +40,7 @@
     import { MoveResult } from '../omok_engine/move_status';
     import LobbyFactory from "../multiplayer/lobby/lobby_factory";
     import { LobbyType } from "../multiplayer/lobby/base_lobby";
+import { GameEngineEvent } from "../omok_engine/game_events";
 
     let player_turn: number, 
         piece_coord: string, 
@@ -54,6 +55,11 @@
         const lobby = LobbyFactory.create_lobby(game_instance, LobbyType.LOCAL);
         lobby.start();
         
+        game_instance.addEventListener(GameEngineEvent.PIECE_PLACED, () => {
+          console.log("piece placed");
+        });
+
+
         const omok_board = (p: p5) => {
             const board_size_px = 700;
             const board_gui: OmokBoardView = new OmokBoardView(p, 19, 37, .5, 2, board_size_px, "/edward-cullen.jpg");
