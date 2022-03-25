@@ -1,9 +1,9 @@
-<NavigationBar></NavigationBar>
 
+<header>
+    <h1>omok.io</h1>
+    <NavigationBar></NavigationBar>
+</header>
 <main>
-    <wired-card elevation="1">
-        <h1>omok.io</h1>
-    </wired-card>
     {#if loadedComponent}
         <svelte:component this={loadedComponent} />
     {:else }
@@ -61,6 +61,10 @@
         src: url("/Visitor.woff2") format('woff2');
     }
 
+    :global(h1, h2, h3, h4){
+        margin: 0;
+    }
+
     :global(a){
         text-decoration: none;
     }
@@ -74,21 +78,20 @@
         min-height: 100%;
         display: grid;
         grid-template-rows: 0fr 1fr 0fr;
-        align-items: end;
+        max-width: 1200px;
+        margin: auto;
+
+        > header{
+            display: flex;
+            justify-content: space-between;
+            max-width: 720px;
+            align-items: end;
+        }
     }
 
     main {
         display: grid;
         gap: 10px;
-        max-width: 1200px;
-        margin: auto;
-
-        > wired-card{
-            text-align: center;
-            font-size: 36px;
-            padding: 10px;
-            opacity: 1;
-        }
     }
 
     footer {
@@ -98,5 +101,5 @@
         font-size: 18px;
     }
 
-    h1 { font-weight: normal }
+    h1 { font-weight: normal; font-size: 3.5em; }
 </style>

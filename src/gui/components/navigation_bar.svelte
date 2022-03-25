@@ -1,24 +1,15 @@
 <nav>
   <ul>
     <li><wired-button elevation="2">Home</wired-button></li>
+    <li><wired-button elevation="2">Log In</wired-button></li>
   </ul>
 </nav>
 
-<style>
-  nav {
-    width: auto;
-    margin: 8px;
-    display: flex;
-    align-items: center;
-  }
-
-  ul {
-    list-style-type: none;
-  }
-
+<style lang="scss">
+  ul { margin: 0; }
   li {
-    float: left;
-    margin: 4px;
+    display: inline-block;
+    margin: 15px 0;
   }
 </style>
 
