@@ -54,10 +54,20 @@ import { GameEngineEvent } from "../omok_engine/game_events";
         const game_instance = new OmokGame();
         const lobby = LobbyFactory.create_lobby(game_instance, LobbyType.LOCAL);
         lobby.start();
+<<<<<<< Updated upstream
         
         game_instance.addEventListener(GameEngineEvent.PIECE_PLACED, () => {
           console.log("piece placed");
         });
+=======
+    }
+
+    const piece_placed = (event: CustomEvent) => {
+        const event_data: GameEngineEventData = event.detail;
+        board_gui.place_piece(event_data.x, event_data.y, game_instance.current_player);
+        player_turn = game_instance.current_player+1;
+    }
+>>>>>>> Stashed changes
 
 
         const omok_board = (p: p5) => {
