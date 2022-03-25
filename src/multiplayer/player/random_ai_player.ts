@@ -14,10 +14,11 @@ export default class RandomAIPlayer extends BasePlayer {
 
   schedule_move(): void {
     const game_instance = this.lobby.game_instance;
-    const move: IMove = {
-      x: Math.floor(Math.random() * game_instance.board_size),
-      y: Math.floor(Math.random() * game_instance.board_size),
-    };
-    this.make_move(move);
+    const available_moves = game_instance.get_available_moves();
+    const random_move = available_moves[Math.floor(Math.random() * available_moves.length)];
+    this.make_move({
+      x: random_move.x,
+      y: random_move.y
+    });
   }
 }

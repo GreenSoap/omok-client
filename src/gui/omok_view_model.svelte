@@ -64,7 +64,7 @@
   
     const initialize = () => {
         game_instance = new OmokGame();
-        lobby = LobbyFactory.create_lobby(game_instance, LobbyType.LOCAL);
+        lobby = LobbyFactory.create_lobby(game_instance, LobbyType.AI);
         game_instance.addEventListener(GameEngineEvent.PIECE_PLACED, piece_placed);
         game_instance.addEventListener(GameEngineEvent.GAME_OVER, game_over);
 

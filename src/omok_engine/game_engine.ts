@@ -125,6 +125,24 @@ export default class OmokGame extends EventTarget {
         return MoveResult.VALID;
     }
 
+    get_available_moves(){
+      const moves = [];
+      for(let x = 0; x < this.board_size; x++){
+        column_loop:
+        for(let y = 0; y < this.board_size; y++){
+          // Loop through each player's board and break as soon as a piece is found
+          for(let i = 0; i < this.player_amount; i++){
+            if(this.players[i].board.get_piece_value(x, y) == 1)
+              continue column_loop;
+          }
+
+          moves.push({x, y});
+        }
+      }
+
+      return moves;
+    }
+
     private dispatch_piece_placed_event(x: number, y: number){
         this.dispatchEvent(new CustomEvent(GameEngineEvent.PIECE_PLACED, {
           detail: {
