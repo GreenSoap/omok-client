@@ -34,7 +34,10 @@
   },
   "type": "module",
   "dependencies": {
+    "@fortawesome/free-brands-svg-icons": "^6.1.1",
+    "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "p5": "^1.4.1",
-    "roughjs": "^4.5.2"
+    "roughjs": "^4.5.2",
+    "svelte-fa": "^2.4.0"
   }
 }
