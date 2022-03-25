@@ -25,8 +25,6 @@
     import rough from "roughjs";
     import { OmokBoardView } from './omok_board';
     import DebugPanel from './debug_panel.svelte'; 
-    import LocalPlayer from "../multiplayer/player/local_player";
-    //import PlayerOnline from "../multiplayer/player_online";
     import OmokGame from "../omok_engine/game_engine";
     import { MoveResult } from '../omok_engine/move_status';
     import LobbyFactory from "../multiplayer/lobby/lobby_factory";
