@@ -1,4 +1,4 @@
-import type IMultiplayerGameMove from "./i_move";
+import type IMultiplayerGameMove from "../i_move";
 import PlayerBase from "./player_base";
 
 export default class PlayerLocal extends PlayerBase{
