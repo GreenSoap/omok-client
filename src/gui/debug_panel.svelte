@@ -55,7 +55,7 @@
     import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons'
     export let mouse_coord, piece_coord, player_turn, victory_status;
 
-    let is_open = false;
+    let is_open = true;
     const handle_closer_click = (evt: Event) => {
       is_open = !is_open;      
     }
