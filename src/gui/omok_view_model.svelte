@@ -39,8 +39,9 @@
     import OmokGame from "../omok_engine/game_engine";
     import { MoveResult } from '../omok_engine/move_status';
     import LobbyFactory from "../multiplayer/lobby/lobby_factory";
-    import { LobbyType } from "../multiplayer/lobby/base_lobby";
-import { GameEngineEvent } from "../omok_engine/game_events";
+    import Lobby, { LobbyType } from "../multiplayer/lobby/base_lobby";
+    import { GameEngineEvent, type GameEngineEventData } from "../omok_engine/game_events";
+    import type { RoughCanvas } from "roughjs/bin/canvas";
 
     let player_turn: number, 
         piece_coord: string, 
@@ -50,21 +51,42 @@ import { GameEngineEvent } from "../omok_engine/game_events";
     let last_piece_y: number;
     let last_piece_x: number;
 
-    onMount(() => {
-        const game_instance = new OmokGame();
-        const lobby = LobbyFactory.create_lobby(game_instance, LobbyType.LOCAL);
-        lobby.start();
-        
-        game_instance.addEventListener(GameEngineEvent.PIECE_PLACED, () => {
-          console.log("piece placed");
-        });
 
+
+    let board_gui: OmokBoardView;
+    let game_instance: OmokGame;
+    let lobby: Lobby;
+
+    let p: p5;
+    let rough_canvas: RoughCanvas;
+
+    const board_size_px = 700;
+
+    const initialize = () => {
+        game_instance = new OmokGame();
+        lobby = LobbyFactory.create_lobby(game_instance, LobbyType.LOCAL);
+        game_instance.addEventListener(GameEngineEvent.PIECE_PLACED, piece_placed);
+        game_instance.addEventListener(GameEngineEvent.GAME_OVER, game_over);
+        lobby.start();
+    }
+
+    const piece_placed = (event: CustomEvent) => {
+        const event_data: GameEngineEventData = event.detail;
+        console.log(event_data);
+
+        board_gui.place_piece(event_data.x, event_data.y, game_instance.current_player);
+        player_turn = game_instance.current_player+1;
+    }
+
+    const game_over = (event: CustomEvent) => {
+        victory_status = MoveResult[event.detail.victory_result];
+    }
+
+    onMount(() => {
+        initialize();
 
         const omok_board = (p: p5) => {
-            const board_size_px = 700;
-            const board_gui: OmokBoardView = new OmokBoardView(p, 19, 37, .5, 2, board_size_px, "/edward-cullen.jpg");
-
-            let rough_canvas;
+            board_gui = new OmokBoardView(p, 19, 37, .5, 2, board_size_px, "/edward-cullen.jpg");
 
             p.preload = () => {
                 board_gui.preload();
@@ -76,27 +98,18 @@ import { GameEngineEvent } from "../omok_engine/game_events";
                 p.frameRate(0);
                 rough_canvas = rough.canvas(document.getElementById("defaultCanvas0") as HTMLCanvasElement);
                 board_gui.rough_canvas = rough_canvas;
-                player_turn = game_instance.current_player+1;
-
                 board_gui.draw();
-
             }
 
             p.mouseClicked = () => { 
                 const [piece_x, piece_y] = board_gui.get_piece_coordinate(p.mouseX, p.mouseY);
+                const can_place_piece = board_gui.can_place_piece(piece_x, piece_y);
+                if (!can_place_piece) return;
 
-                const piece_has_been_placed = board_gui.place_piece(piece_x, piece_y, game_instance.current_player);
-
-                if (piece_has_been_placed){
-                    const move_result = lobby.players[game_instance.current_player].make_move({
+                lobby.players[game_instance.current_player].make_move({
                         x: piece_x,
                         y: piece_y
-                    });
-
-                    victory_status = MoveResult[move_result];
-
-                    player_turn = game_instance.current_player+1;
-                }
+                });
             }
             
             p.mouseMoved = () => {

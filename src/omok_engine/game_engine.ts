@@ -41,12 +41,18 @@ export default class OmokGame extends EventTarget {
         if (this.victory_status === MoveResult.INVALID) return MoveResult.INVALID;
 
         this.players[this.current_player].place_piece(x, y);
-        //
-        this.dispatchEvent(new Event(GameEngineEvent.PIECE_PLACED));
-        //
+        
+        this.dispatch_piece_placed_event(x, y);
         
         const move_win_status = this.is_move_win(x, y);
-        this.current_player = (this.current_player+1) % this.players.length;        
+        this.current_player = (this.current_player+1) % this.players.length;       
+        
+        if (move_win_status === MoveResult.WIN_DIAGONAL_LEFT ||
+            move_win_status === MoveResult.WIN_DIAGONAL_RIGHT ||
+            move_win_status === MoveResult.WIN_STRAIGHT){
+                this.dispatch_game_over_event();
+            }
+
         return move_win_status;
     }
 
@@ -116,5 +122,24 @@ export default class OmokGame extends EventTarget {
         }
 
         return MoveResult.VALID;
+    }
+
+    private dispatch_piece_placed_event(x: number, y: number){
+        this.dispatchEvent(new CustomEvent(GameEngineEvent.PIECE_PLACED, {
+            detail: {
+                x,
+                y,
+                player_id: this.current_player
+            }
+        }));
+    }
+
+    private dispatch_game_over_event(){
+        this.dispatchEvent(new CustomEvent(GameEngineEvent.GAME_OVER, {
+            detail: {
+                player_id: this.current_player,
+                victory_result: this.victory_status
+            }
+        }));
     }
 }

@@ -52,15 +52,14 @@ export class OmokBoardView {
   }
 
   place_piece(piece_x: number, piece_y: number, player: number){
-    if (this.pieces.has(`${piece_x},${piece_y}`) ||
-      piece_x >= this.size || piece_y >= this.size ||
-      piece_x < 0 || piece_y < 0)
-      return false;
-
     this.pieces.set(`${piece_x},${piece_y}`, new OmokPiece(this.rough_canvas, piece_x  * this.piece_size, piece_y  * this.piece_size, this.piece_size, player));
     this.pieces.get(`${piece_x},${piece_y}`).draw();
+  }
 
-    return true;
+  can_place_piece(piece_x: number, piece_y: number){
+    return (!(this.pieces.has(`${piece_x},${piece_y}`) ||
+      piece_x >= this.size || piece_y >= this.size ||
+      piece_x < 0 || piece_y < 0))
   }
 
   highlight_piece_position(mouse_x: number, mouse_y: number){
