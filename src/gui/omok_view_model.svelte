@@ -28,8 +28,9 @@
     import LocalPlayer from "../multiplayer/player/local_player";
     //import PlayerOnline from "../multiplayer/player_online";
     import OmokGame from "../omok_engine/game_engine";
-    import MultiplayerLobby from "../multiplayer/multiplayer_lobby";
     import { MoveResult } from '../omok_engine/move_status';
+    import LobbyFactory from "../multiplayer/lobby_factory";
+    import { LobbyType } from "../multiplayer/lobby/base_lobby";
 
     let player_turn: number, 
         piece_coord: string, 
@@ -41,11 +42,7 @@
 
     onMount(() => {
         const game_instance = new OmokGame();
-        const lobby = new MultiplayerLobby(game_instance);
-
-        lobby.add_player(new LocalPlayer(lobby));
-        lobby.add_player(new LocalPlayer(lobby));
-
+        const lobby = LobbyFactory.create_lobby(game_instance, LobbyType.LOCAL);
 
         const omok_board = (p: p5) => {
             const board_size_px = 700;
