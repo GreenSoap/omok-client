@@ -1,5 +1,5 @@
 import type OmokGame from "src/omok_engine/game_engine";
-import type IMultiplayerGameMove from "./i_multiplayer_game_move";
+import type IMove from "./i_move";
 import type PlayerBase from "./player_base";
 
 export default class MultiplayerMediator{
@@ -10,7 +10,7 @@ export default class MultiplayerMediator{
         this.players.push(player);
     };
 
-    make_move(move: IMultiplayerGameMove){
+    make_move(player: PlayerBase, move: IMove){
         return this.game_instance.place_piece(move.x, move.y);
     };
 }
