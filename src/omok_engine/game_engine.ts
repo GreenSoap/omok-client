@@ -2,7 +2,7 @@ import Player from './player';
 import { MoveResult } from './move_status';
 
 export default class OmokGame{
-
+    board_size = 19;
     players: Array<Player> = [];
     current_player = 0;
     player_amount = 2;
@@ -22,7 +22,7 @@ export default class OmokGame{
     }
 
     private create_player(){
-        const new_player = new Player(19);
+        const new_player = new Player(this.board_size);
         return new_player;
     }
 
@@ -35,8 +35,8 @@ export default class OmokGame{
 
     public place_piece(x: number, y: number){
         //check if move is valid
-        const is_move_valid = this.is_move_valid(x, y);
-        if (!is_move_valid) return MoveResult.INVALID;
+        this.victory_status = this.is_move_valid(x, y) ? MoveResult.VALID : MoveResult.INVALID;
+        if (this.victory_status === MoveResult.INVALID) return MoveResult.INVALID;
 
         this.players[this.current_player].place_piece(x, y);
         
@@ -59,14 +59,14 @@ export default class OmokGame{
     private is_move_win(x: number, y: number){
         // check columns
         const move_result = this.detect_victory(x, y, this.players[this.current_player].board.field, true);        
-        if (move_result !== MoveResult.NULL){
+        if (move_result !== MoveResult.VALID){
             this.victory_status = move_result;
             return this.victory_status;
         }
 
         // check rows
         const move_inverted_result = this.detect_victory(x, y, this.players[this.current_player].board_inverted.field, false);
-        if (move_inverted_result !== MoveResult.NULL)
+        if (move_inverted_result !== MoveResult.VALID)
             this.victory_status = move_inverted_result;
         
         return this.victory_status;
@@ -110,6 +110,6 @@ export default class OmokGame{
                 return MoveResult.WIN_DIAGONAL_RIGHT;
         }
 
-        return MoveResult.NULL;
+        return MoveResult.VALID;
     }
 }

@@ -41,7 +41,8 @@
     onMount(() => {
         const game_instance = new OmokGame();
         const lobby = LobbyFactory.create_lobby(game_instance, LobbyType.LOCAL);
-
+        lobby.start();
+        
         const omok_board = (p: p5) => {
             const board_size_px = 700;
             const board_gui: OmokBoardView = new OmokBoardView(p, 19, 37, .5, 2, board_size_px, "/edward-cullen.jpg");

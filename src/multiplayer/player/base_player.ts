@@ -3,9 +3,10 @@ import type IMove from "../i_move";
 import type Lobby from "../lobby/base_lobby";
 
 export default abstract class BasePlayer {
-    constructor(protected lobby: Lobby){
-        
-    }
+  constructor(protected lobby: Lobby, protected player_id: number) {}
 
-    abstract make_move(move: IMove): MoveResult;
+  get id() { return this.player_id; }
+  
+  abstract make_move(move: IMove): MoveResult;
+  abstract schedule_move();
 }
