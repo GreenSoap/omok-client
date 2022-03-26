@@ -66,7 +66,7 @@ export default class OmokGame extends EventTarget {
 
 	private is_move_valid(x: number, y: number) {
 		// Check if the position is occupied by another player's piece
-    
+
 		/* for (let i = 0; i < this.players.length - 1; i++) {
 			const current_piece = this.players[i].board.get_piece_value(x, y);
 			const next_player_piece = this.players[i + 1].board.get_piece_value(x, y);
@@ -148,16 +148,11 @@ export default class OmokGame extends EventTarget {
 	get_available_moves() {
 		const moves = [];
 		for (let x = 0; x < this.board_size; x++) {
-			column_loop: for (let y = 0; y < this.board_size; y++) {
-				// Loop through each player's board and break as soon as a piece is found
-				for (let i = 0; i < this.player_amount; i++) {
-					if (this.players[i].board.get_piece_value(x, y) == 1) continue column_loop;
-				}
-
-				moves.push({ x, y });
+			for (let y = 0; y < this.board_size; y++) {
+				if (this.is_move_valid(x, y))
+          moves.push({ x, y });
 			}
 		}
-
 		return moves;
 	}
 

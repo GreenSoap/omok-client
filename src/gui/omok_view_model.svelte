@@ -72,7 +72,6 @@
 
   const piece_placed = (event: CustomEvent) => {
       const event_data: GameEngineEventData = event.detail;
-      console.log(event_data);
 
       board_gui.place_piece(event_data.x, event_data.y, game_instance.current_player);
       player_turn = game_instance.current_player+1;
