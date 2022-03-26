@@ -4,6 +4,7 @@ import LocalLobby from "./local_lobby";
 import LocalPlayer from "../player/local_player";
 import RandomAIPlayer from "../player/random_ai_player";
 import AILobby from "./ai_lobby";
+import OnlineLobby from "./online_lobby";
 
 export default class LobbyFactory {
   static create_lobby(game_instance: OmokGame, lobby_type: LobbyType): Lobby {
@@ -11,13 +12,16 @@ export default class LobbyFactory {
     switch (lobby_type) {
       case LobbyType.LOCAL:
         lobby = new LocalLobby(game_instance);
-        lobby.add_player(new LocalPlayer(lobby, 0));
-        lobby.add_player(new LocalPlayer(lobby, 1));
+        lobby.add_player(new LocalPlayer(lobby, 0, "Player 1"));
+        lobby.add_player(new LocalPlayer(lobby, 1, "Player 2"));
         break;
       case LobbyType.AI:
         lobby = new AILobby(game_instance);
-        lobby.add_player(new LocalPlayer(lobby, 0));
+        lobby.add_player(new LocalPlayer(lobby, 0, "Player 1"));
         lobby.add_player(new RandomAIPlayer(lobby, 1));
+        break;
+      case LobbyType.ONLINE:
+        lobby = new OnlineLobby(game_instance);
         break;
       default:
         console.error(`Lobby type ${lobby_type} not supported`);

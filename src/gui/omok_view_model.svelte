@@ -9,6 +9,10 @@
       victory_status={victory_status}>
     </DebugPanel>
     <ChatRoom></ChatRoom>
+    <wired-card>
+      <wired-button on:click={() => create_lobby()}>Create</wired-button>
+      <wired-button on:click={() => connect_to_lobby()}>Connect</wired-button>
+    </wired-card>
   </div>
 </section>
   
@@ -42,6 +46,10 @@
   import Lobby, { LobbyType } from "../multiplayer/lobby/base_lobby";
   import { GameEngineEvent, type GameEngineEventData } from "../omok_engine/game_events";
   import type { RoughCanvas } from "roughjs/bin/canvas";
+  import type OnlineLobby from "src/multiplayer/lobby/online_lobby";
+  import type BasePlayer from "src/multiplayer/player/base_player";
+  import LocalPlayer from "../multiplayer/player/local_player";
+  import OnlinePlayer from "../multiplayer/player/online_player";
 
   let player_turn: number, 
       piece_coord: [number, number], 
@@ -56,6 +64,7 @@
   let board_gui: OmokBoardView;
   let game_instance: OmokGame;
   let lobby: Lobby;
+  let player: BasePlayer;
 
   let p: p5;
   let rough_canvas: RoughCanvas;
@@ -64,11 +73,29 @@
 
   const initialize = () => {
       game_instance = new OmokGame();
-      lobby = LobbyFactory.create_lobby(game_instance, LobbyType.AI);
+      lobby = LobbyFactory.create_lobby(game_instance, LobbyType.ONLINE);
       game_instance.addEventListener(GameEngineEvent.PIECE_PLACED, piece_placed);
       game_instance.addEventListener(GameEngineEvent.GAME_OVER, game_over);
-      lobby.start();
   }
+
+  const lobby_code = "456";
+  const create_lobby = () => {
+    (lobby as OnlineLobby).create_lobby_listing(lobby_code);
+    player = new LocalPlayer(lobby, 0, "Player 1")
+    lobby.add_player(player);
+    lobby.add_player(new OnlinePlayer(lobby, 1, "Player 2"));
+    game_instance.start_game();
+  };
+
+  const connect_to_lobby = () => {
+    (lobby as OnlineLobby).connect_to_lobby(lobby_code);
+    lobby.addEventListener('lobby_connected', () => {
+      lobby.add_player(new OnlinePlayer(lobby, 0, "Player 1"));
+      player = new LocalPlayer(lobby, 1, "Player 2")
+      lobby.add_player(player);
+      game_instance.start_game();
+    });
+  };
 
   const piece_placed = (event: CustomEvent) => {
       const event_data: GameEngineEventData = event.detail;
@@ -87,7 +114,11 @@
       const can_place_piece = board_gui.can_place_piece(piece_x, piece_y);
       if (!can_place_piece) return;
 
-      lobby.players[game_instance.current_player].make_move({
+      /* lobby.players[game_instance.current_player].make_move({
+        x: piece_x,
+        y: piece_y
+      }); */
+      player.make_move({
         x: piece_x,
         y: piece_y
       });

@@ -38,7 +38,6 @@ export default abstract class Lobby extends EventTarget {
   make_move(player: BasePlayer, move: IMove): MoveResult {
     if (this.game_instance.current_player != player.id) return MoveResult.INVALID;
 
-    console.log(move);
     console.log(`${player.id} player made move: ${move.x}, ${move.y}`);
     const move_result =  this.game_instance.place_piece(move.x, move.y);
 

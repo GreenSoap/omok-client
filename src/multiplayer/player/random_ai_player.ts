@@ -5,7 +5,7 @@ import BasePlayer from "./base_player";
 
 export default class RandomAIPlayer extends BasePlayer {
   constructor(lobby: Lobby, player_id: number) {
-    super(lobby, player_id);
+    super(lobby, player_id, "Random AI");
   }
 
   make_move(move: IMove): MoveResult {
