@@ -44,8 +44,8 @@
   import type { RoughCanvas } from "roughjs/bin/canvas";
 
   let player_turn: number, 
-      piece_coord: string, 
-      mouse_coord: string,
+      piece_coord: [number, number], 
+      mouse_coord: [number, number],
       victory_status: string;
 
   let last_piece_y: number;
@@ -64,7 +64,7 @@
 
   const initialize = () => {
       game_instance = new OmokGame();
-      lobby = LobbyFactory.create_lobby(game_instance, LobbyType.LOCAL);
+      lobby = LobbyFactory.create_lobby(game_instance, LobbyType.AI);
       game_instance.addEventListener(GameEngineEvent.PIECE_PLACED, piece_placed);
       game_instance.addEventListener(GameEngineEvent.GAME_OVER, game_over);
       lobby.start();
@@ -72,7 +72,6 @@
 
   const piece_placed = (event: CustomEvent) => {
       const event_data: GameEngineEventData = event.detail;
-      console.log(event_data);
 
       board_gui.place_piece(event_data.x, event_data.y, game_instance.current_player);
       player_turn = game_instance.current_player+1;
@@ -115,13 +114,13 @@
 
     // If mouse is OOB, do not update with current mouse coords
     if (piece_x >= board_gui.size || piece_y >= board_gui.size || piece_x < 0 || piece_y < 0){
-      piece_coord = "";
-      mouse_coord = "";
+      piece_coord = [NaN, NaN];
+      mouse_coord = [NaN, NaN];
       return;
     }
 
-    mouse_coord = "[" + Math.round(p.mouseX) + ", " + Math.round(p.mouseY) + "]";
-    piece_coord = "[" + piece_x + ", " + piece_y + "]";
+    mouse_coord = [Math.round(p.mouseX), Math.round(p.mouseY)];
+    piece_coord = [piece_x, piece_y];
 
     board_gui.draw();
     board_gui.highlight_piece_position(p.mouseX, p.mouseY);

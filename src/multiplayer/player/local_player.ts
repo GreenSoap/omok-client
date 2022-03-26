@@ -13,6 +13,5 @@ export default class LocalPlayer extends BasePlayer{
 
   schedule_move() {
     // do nothing for local player
-    console.log(`${this.id} turn`);
   }
 }
