@@ -3,12 +3,15 @@ import type OmokGame from "src/omok_engine/game_engine";
 import type IMove from "../i_move";
 import { MoveResult } from "../../omok_engine/move_status";
 import { GameEngineEvent } from "../../omok_engine/game_events";
+import LocalPlayer from "../player/local_player";
 
 export enum LobbyType {
   LOCAL = 0,
   ONLINE = 1,
   AI = 2,
   SPECTATOR = 3,
+  ONLINE_CREATE = 4,
+  ONLINE_JOIN = 5,
 }
 
 export default abstract class Lobby extends EventTarget {
@@ -22,8 +25,7 @@ export default abstract class Lobby extends EventTarget {
   }
 
   start() {
-    const initial_turn_event = this.player_turn_events[this.game_instance.current_player];
-    this.dispatchEvent(initial_turn_event);
+    this.request_next_move();
   }
 
   add_player(player: BasePlayer){
@@ -45,7 +47,16 @@ export default abstract class Lobby extends EventTarget {
   }
 
   private request_next_move(){
+    const next_player = this.players[this.game_instance.current_player];
     this.dispatchEvent(this.player_turn_events[this.game_instance.current_player]);
+    console.log(",eep");
+    if (this.players[this.game_instance.current_player] instanceof LocalPlayer) {
+      this.dispatchEvent(new CustomEvent('local_player_turn', {
+        detail: {
+          player: next_player,
+        }
+      }));
+    }
   }
 }
 

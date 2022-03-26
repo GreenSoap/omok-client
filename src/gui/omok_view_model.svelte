@@ -73,27 +73,30 @@
 
   const initialize = () => {
       game_instance = new OmokGame();
-      lobby = LobbyFactory.create_lobby(game_instance, LobbyType.ONLINE);
       game_instance.addEventListener(GameEngineEvent.PIECE_PLACED, piece_placed);
       game_instance.addEventListener(GameEngineEvent.GAME_OVER, game_over);
   }
 
-  const lobby_code = "456";
+  const lobby_code = "OOP";
   const create_lobby = () => {
-    (lobby as OnlineLobby).create_lobby_listing(lobby_code);
-    player = new LocalPlayer(lobby, 0, "Player 1")
-    lobby.add_player(player);
-    lobby.add_player(new OnlinePlayer(lobby, 1, "Player 2"));
+    lobby = LobbyFactory.create_lobby(game_instance, LobbyType.ONLINE_CREATE, {
+      lobby_code: lobby_code,
+    });
+    attach_local_player_turn_eventlistener(lobby);
+
     game_instance.start_game();
   };
 
   const connect_to_lobby = () => {
-    (lobby as OnlineLobby).connect_to_lobby(lobby_code);
-    lobby.addEventListener('lobby_connected', () => {
-      lobby.add_player(new OnlinePlayer(lobby, 0, "Player 1"));
-      player = new LocalPlayer(lobby, 1, "Player 2")
-      lobby.add_player(player);
-      game_instance.start_game();
+    lobby = LobbyFactory.create_lobby(game_instance, LobbyType.ONLINE_JOIN, {
+      lobby_code: lobby_code,
+    });
+    attach_local_player_turn_eventlistener(lobby);
+  };
+  
+  const attach_local_player_turn_eventlistener = (lobby: Lobby) => {
+    lobby.addEventListener("local_player_turn", (event) => {
+      player = (event as CustomEvent).detail.player;
     });
   };
 
