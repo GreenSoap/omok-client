@@ -36,7 +36,7 @@
 </wired-card>
 
 <style lang="scss">
-	.debug-panel {
+	:global(.debug-panel) {
 		wired-button {
 			background: #ff7979;
 		}
