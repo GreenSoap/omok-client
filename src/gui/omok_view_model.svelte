@@ -44,8 +44,8 @@
   import type { RoughCanvas } from "roughjs/bin/canvas";
 
   let player_turn: number, 
-      piece_coord: string, 
-      mouse_coord: string,
+      piece_coord: [number, number], 
+      mouse_coord: [number, number],
       victory_status: string;
 
   let last_piece_y: number;
@@ -114,13 +114,13 @@
 
     // If mouse is OOB, do not update with current mouse coords
     if (piece_x >= board_gui.size || piece_y >= board_gui.size || piece_x < 0 || piece_y < 0){
-      piece_coord = "";
-      mouse_coord = "";
+      piece_coord = [NaN, NaN];
+      mouse_coord = [NaN, NaN];
       return;
     }
 
-    mouse_coord = "[" + Math.round(p.mouseX) + ", " + Math.round(p.mouseY) + "]";
-    piece_coord = "[" + piece_x + ", " + piece_y + "]";
+    mouse_coord = [Math.round(p.mouseX), Math.round(p.mouseY)];
+    piece_coord = [piece_x, piece_y];
 
     board_gui.draw();
     board_gui.highlight_piece_position(p.mouseX, p.mouseY);
