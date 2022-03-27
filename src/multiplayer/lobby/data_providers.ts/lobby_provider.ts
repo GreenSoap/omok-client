@@ -15,7 +15,7 @@ export default class LobbyProvider {
       if (lobby_query_snapshot.empty) {
         return null;
       }
-      
+
       const lobby_document = lobby_query_snapshot.docs[0];
       return [lobby_document.ref, lobby_document.data()];
     } catch (error) {
@@ -23,9 +23,9 @@ export default class LobbyProvider {
     }
   }
 
-  async create_lobby_listing(lobby_code:string): Promise<DocumentReference<DocumentData>> {
+  async create_lobby_listing(lobby_code: string): Promise<DocumentReference<DocumentData>> {
     try {
-      const lobby_reference = await addDoc(collection(this.db, 'lobbies'),{
+      const lobby_reference = await addDoc(collection(this.db, 'lobbies'), {
         lobby_code: lobby_code,
         moves: [],
       });
