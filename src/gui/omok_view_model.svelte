@@ -79,18 +79,14 @@
 
   const lobby_code = "OOP";
   const create_lobby = () => {
-    lobby = LobbyFactory.create_lobby(game_instance, LobbyType.ONLINE_CREATE, {
-      lobby_code: lobby_code,
-    });
+    lobby = LobbyFactory.create_lobby(game_instance, LobbyType.ONLINE_CREATE, { lobby_code: lobby_code });
     attach_local_player_turn_eventlistener(lobby);
 
-    game_instance.start_game();
+    // game_instance.start_game();
   };
 
   const connect_to_lobby = () => {
-    lobby = LobbyFactory.create_lobby(game_instance, LobbyType.ONLINE_JOIN, {
-      lobby_code: lobby_code,
-    });
+    lobby = LobbyFactory.create_lobby(game_instance, LobbyType.ONLINE_JOIN, { lobby_code: lobby_code });
     attach_local_player_turn_eventlistener(lobby);
   };
   
