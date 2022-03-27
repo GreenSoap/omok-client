@@ -10,7 +10,7 @@ export default class OmokGame extends EventTarget {
 	player_amount = 2;
 	win_condition = 5;
 	victory_status = MoveResult.NULL;
-  game_board: Board;
+	game_board: Board;
 
 	constructor() {
 		super();
@@ -18,7 +18,7 @@ export default class OmokGame extends EventTarget {
 	}
 
 	private initialize_game() {
-    this.game_board = new Board(this.board_size);
+		this.game_board = new Board(this.board_size);
 		this.create_players();
 	}
 
@@ -44,9 +44,9 @@ export default class OmokGame extends EventTarget {
 		this.victory_status = this.is_move_valid(x, y) ? MoveResult.VALID : MoveResult.INVALID;
 		if (this.victory_status === MoveResult.INVALID) return MoveResult.INVALID;
 
-    // Place piece on game_board and player's board
+		// Place piece on game_board and player's board
 		this.players[this.current_player].place_piece(x, y);
-    this.game_board.place_piece(x, y, this.current_player+1); // +1 to avoid 0
+		this.game_board.place_piece(x, y, this.current_player + 1); // +1 to avoid 0
 		this.dispatch_piece_placed_event(x, y);
 
 		const move_win_status = this.is_move_win(x, y);
@@ -74,7 +74,7 @@ export default class OmokGame extends EventTarget {
 		}
 		return true; */
 
-    return this.game_board.get_piece_value(x, y) === 0;
+		return this.game_board.get_piece_value(x, y) === 0;
 	}
 
 	private is_move_win(x: number, y: number) {
@@ -150,7 +150,7 @@ export default class OmokGame extends EventTarget {
 		for (let x = 0; x < this.board_size; x++) {
 			for (let y = 0; y < this.board_size; y++) {
 				if (this.is_move_valid(x, y))
-          moves.push({ x, y });
+					moves.push({ x, y });
 			}
 		}
 		return moves;
