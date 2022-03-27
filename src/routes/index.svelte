@@ -3,15 +3,8 @@
     <h1>omok.io</h1>
     <NavigationBar></NavigationBar>
 </header>
-<main>
-    {#if loadedComponent}
-        <svelte:component this={loadedComponent} />
-    {:else }
-        <section class="loading-screen">
-            <wired-spinner spinning id="sp"></wired-spinner>
-            <p>Loading Omok Game...</p>
-        </section>
-    {/if}
+<main class="app">
+    <MainMenu></MainMenu>
 </main>
 
 <footer>
@@ -21,21 +14,12 @@
     </span>
 </footer>
 
-<script>
-    import { onMount } from "svelte";
+<script lang="ts">
     import "wired-elements"
     import Fa from 'svelte-fa';
     import { faGithub } from '@fortawesome/free-brands-svg-icons';
     import NavigationBar from "../gui/components/navigation_bar.svelte";
-
-    let loadedComponent = null;
-    const OmokViewModel = () => import("../gui/omok_view_model.svelte");
-
-    onMount(() => {
-        OmokViewModel().then(module => {
-            loadedComponent = module.default;
-        });
-    });
+    import MainMenu from '../gui/main_menu.svelte';
 
 </script>
 
@@ -77,7 +61,7 @@
     }
 
     :global(body){
-        font: normal 15px 'Gloria Hallelujah', serif; 
+        font: normal 18px 'Gloria Hallelujah', serif; 
         min-height: 100%;
         display: grid;
         grid-template-rows: 0fr 1fr 0fr;

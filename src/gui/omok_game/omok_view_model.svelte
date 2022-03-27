@@ -10,8 +10,11 @@
     </DebugPanel>
     <ChatRoom></ChatRoom>
     <wired-card>
-      <wired-button on:click={() => create_lobby()}>Create</wired-button>
-      <wired-button on:click={() => connect_to_lobby()}>Connect</wired-button>
+      <span>Lobby Code: <strong contenteditable="true" bind:textContent={lobby_code}></strong></span>
+      <br><span>Creator: <strong contenteditable="true" bind:textContent={creator_name}></strong></span>
+
+      <!--<wired-button on:click={() => create_lobby()}>Create</wired-button>
+      <wired-button on:click={() => connect_to_lobby()}>Connect</wired-button>-->
     </wired-card>
   </div>
 </section>
@@ -26,7 +29,7 @@
           grid-row: 1;
           grid-column: 2; 
           display: grid;
-          grid-auto-rows: 0fr 1fr;
+          grid-auto-rows: 0fr 1fr 0fr;
       }
   }
 </style>
@@ -36,20 +39,19 @@
   import { onMount } from 'svelte';
   import p5 from "p5";
   import rough from "roughjs";
-  import { OmokBoardView } from './omok_board';
-  import ChatRoom from './components/chat_room.svelte';
-
-  import DebugPanel from './debug_panel.svelte'; 
-  import OmokGame from "../omok_engine/game_engine";
-  import { MoveResult } from '../omok_engine/move_status';
-  import LobbyFactory from "../multiplayer/lobby/lobby_factory";
-  import Lobby, { LobbyType } from "../multiplayer/lobby/base_lobby";
-  import { GameEngineEvent, type GameEngineEventData } from "../omok_engine/game_events";
   import type { RoughCanvas } from "roughjs/bin/canvas";
-  import type OnlineLobby from "src/multiplayer/lobby/online_lobby";
-  import type BasePlayer from "src/multiplayer/player/base_player";
-  import LocalPlayer from "../multiplayer/player/local_player";
-  import OnlinePlayer from "../multiplayer/player/online_player";
+  import { OmokBoardView } from './omok_board';
+  import OmokGame from "../../omok_engine/game_engine";
+  import { MoveResult } from '../../omok_engine/move_status';
+  import LobbyFactory from "../../multiplayer/lobby/lobby_factory";
+  import Lobby, { LobbyType } from "../../multiplayer/lobby/base_lobby";
+  import { GameEngineEvent, type GameEngineEventData } from "../../omok_engine/game_events";
+  import type BasePlayer from "../../multiplayer/player/base_player";
+  import ChatRoom from '../components/chat_room.svelte';
+  import DebugPanel from './debug_panel.svelte'; 
+
+  // props
+  export let lobby_code: string, creator_name: string, lobby_type: LobbyType;
 
   let player_turn: number, 
       piece_coord: [number, number], 
@@ -77,7 +79,6 @@
       game_instance.addEventListener(GameEngineEvent.GAME_OVER, game_over);
   }
 
-  const lobby_code = "OOP";
   const create_lobby = () => {
     lobby = LobbyFactory.create_lobby(game_instance, LobbyType.ONLINE_CREATE, { lobby_code: lobby_code });
     attach_local_player_turn_eventlistener(lobby);
@@ -161,6 +162,7 @@
 
   onMount(() => {
     initialize();
+    console.log(lobby_code, creator_name);
 
     const omok_board = (_p: p5) => {
       p = _p;

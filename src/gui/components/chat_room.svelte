@@ -1,46 +1,52 @@
-<wired-card>
-  <ol>
-      <li>
-        <article>
-          <header>
-            <figure>
-              <figcaption>William</figcaption>
-            </figure>
-            <time>11:32</time>
-          </header>
-          <p>Hello my name is William xDxD</p>
-        </article>
-      </li>
-      <li>
-        <article>
-          <header>
-            <figure>
-              <figcaption>Joshua</figcaption>
-            </figure>
-            <time>11:32</time>
-          </header>
-          <p>Hello my name is William xDxD</p>
-        </article>
-      </li>
-      <li>
-        <article>
-          <header>
-            <figure>
-              <figcaption>William</figcaption>
-            </figure>
-            <time>11:32</time>
-          </header>
-          <p>Hello my name is Joshua xDxD</p>
-        </article>
-      </li>
-    </ol>
-  </wired-card>
-<section class="input-area">
-  <wired-input></wired-input>
-  <wired-button elevation="2">Send <Fa icon={faPaperPlane}></Fa></wired-button>
-</section>
+<div>
+  <wired-card>
+    <ol>
+        <li>
+          <article>
+            <header>
+              <figure>
+                <figcaption>William</figcaption>
+              </figure>
+              <time>11:32</time>
+            </header>
+            <p>Hello my name is William xDxD</p>
+          </article>
+        </li>
+        <li>
+          <article>
+            <header>
+              <figure>
+                <figcaption>Joshua</figcaption>
+              </figure>
+              <time>11:32</time>
+            </header>
+            <p>Hello my name is William xDxD</p>
+          </article>
+        </li>
+        <li>
+          <article>
+            <header>
+              <figure>
+                <figcaption>William</figcaption>
+              </figure>
+              <time>11:32</time>
+            </header>
+            <p>Hello my name is Joshua xDxD</p>
+          </article>
+        </li>
+      </ol>
+    </wired-card>
+  <section class="input-area">
+    <wired-input></wired-input>
+    <wired-button elevation="2">Send <Fa icon={faPaperPlane}></Fa></wired-button>
+  </section>
+</div>
 
 <style lang="scss">
+  div{
+    display: grid;
+    grid-auto-rows: 1fr 0fr;
+  }
   ol {
     list-style: none;
     margin: 5px 20px;
