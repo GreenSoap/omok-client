@@ -15,7 +15,6 @@ export default class OnlinePlayer extends BasePlayer {
   }
 
   schedule_move() {
-    console.log("waiting for opponent to make move...");
     const unsubscribe = onSnapshot((this.lobby as OnlineLobby).lobby_reference, (lobby_document) => {
       const move = lobby_document.data().moves[lobby_document.data().moves.length - 1];
       if (this.id === move.player_id) {

@@ -22,7 +22,6 @@ export default class OnlineLobby extends Lobby {
   override make_move(player: BasePlayer, move: IMove): MoveResult {
     if (this.game_instance.current_player != player.id) return MoveResult.INVALID;
 
-    console.log(`${player.id} player made move: ${move.x}, ${move.y}`);
     const move_result = this.game_instance.place_piece(move.x, move.y);
     updateDoc(this.lobby_reference, {
       moves: arrayUnion({

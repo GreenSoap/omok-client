@@ -43,7 +43,7 @@
   import { MoveResult } from '../../omok_engine/move_status';
   import LobbyFactory from "../../multiplayer/lobby/lobby_factory";
   import type Lobby from "../../multiplayer/lobby/base_lobby";
-  import { LobbyType } from "../../multiplayer/lobby/base_lobby";
+  import type { LobbyType } from "../../multiplayer/lobby/base_lobby";
   import { GameEngineEvent, type GameEngineEventData } from "../../omok_engine/game_events";
   import type BasePlayer from "../../multiplayer/player/base_player";
   import ChatRoom from '../components/chat_room.svelte';
@@ -82,18 +82,6 @@
       game_instance.addEventListener(GameEngineEvent.GAME_OVER, game_over);
   }
 
-  /* const create_lobby = () => {
-    lobby = LobbyFactory.create_lobby(game_instance, LobbyType.ONLINE_CREATE, { lobby_code: lobby_code });
-    attach_local_player_turn_eventlistener(lobby);
-
-    // game_instance.start_game();
-  };
-
-  const connect_to_lobby = () => {
-    lobby = LobbyFactory.create_lobby(game_instance, LobbyType.ONLINE_JOIN, { lobby_code: lobby_code });
-    attach_local_player_turn_eventlistener(lobby);
-  }; */
-
   const start_game_button_clicked = () => {
     // if the game is already ongoing
     if (game_instance.victory_status !== MoveResult.NULL) return;
@@ -104,7 +92,6 @@
   const attach_local_player_turn_eventlistener = (lobby: Lobby) => {
     lobby.addEventListener("local_player_turn", (event) => {
       player = (event as CustomEvent).detail.player;
-      console.log(player);
     });
   };
 
@@ -124,11 +111,6 @@
     const [piece_x, piece_y] = board_gui.get_piece_coordinate(p.mouseX, p.mouseY);
     const can_place_piece = board_gui.can_place_piece(piece_x, piece_y);
     if (!can_place_piece) return;
-
-    /* lobby.players[game_instance.current_player].make_move({
-      x: piece_x,
-      y: piece_y
-    }); */
     player.make_move({
       x: piece_x,
       y: piece_y

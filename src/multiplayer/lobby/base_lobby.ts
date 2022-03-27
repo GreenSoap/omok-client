@@ -38,9 +38,10 @@ export default abstract class Lobby extends EventTarget {
   };
 
   make_move(player: BasePlayer, move: IMove): MoveResult {
-    if (this.game_instance.current_player != player.id) return MoveResult.INVALID;
+    if (this.game_instance.current_player != player.id) {
+      return MoveResult.INVALID
+    };
 
-    console.log(`${player.id} player made move: ${move.x}, ${move.y}`);
     const move_result = this.game_instance.place_piece(move.x, move.y);
 
     return move_result;
@@ -49,8 +50,7 @@ export default abstract class Lobby extends EventTarget {
   private request_next_move() {
     const next_player = this.players[this.game_instance.current_player];
     this.dispatchEvent(this.player_turn_events[this.game_instance.current_player]);
-    console.log(",eep");
-    if (this.players[this.game_instance.current_player] instanceof LocalPlayer) {
+    if (next_player instanceof LocalPlayer) {
       this.dispatchEvent(new CustomEvent('local_player_turn', {
         detail: {
           player: next_player,
