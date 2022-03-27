@@ -9,7 +9,7 @@ export default class RandomAIPlayer extends BasePlayer {
   }
 
   make_move(move: IMove): MoveResult {
-      return this.lobby.make_move(this, move);
+    return this.lobby.make_move(this, move);
   }
 
   schedule_move(): void {

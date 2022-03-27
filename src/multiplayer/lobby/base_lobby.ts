@@ -18,7 +18,7 @@ export default abstract class Lobby extends EventTarget {
   players: Array<BasePlayer> = [];
   player_turn_events: Array<Event> = [];
   abstract lobby_type: LobbyType;
-  constructor(public game_instance: OmokGame){
+  constructor(public game_instance: OmokGame) {
     super();
     game_instance.addEventListener(GameEngineEvent.GAME_START, () => this.start());
     game_instance.addEventListener(GameEngineEvent.NEW_TURN, () => this.request_next_move());
@@ -28,7 +28,7 @@ export default abstract class Lobby extends EventTarget {
     this.request_next_move();
   }
 
-  add_player(player: BasePlayer){
+  add_player(player: BasePlayer) {
     this.players.push(player);
 
     // Create and attach turn event listeners
@@ -41,12 +41,12 @@ export default abstract class Lobby extends EventTarget {
     if (this.game_instance.current_player != player.id) return MoveResult.INVALID;
 
     console.log(`${player.id} player made move: ${move.x}, ${move.y}`);
-    const move_result =  this.game_instance.place_piece(move.x, move.y);
+    const move_result = this.game_instance.place_piece(move.x, move.y);
 
     return move_result;
   }
 
-  private request_next_move(){
+  private request_next_move() {
     const next_player = this.players[this.game_instance.current_player];
     this.dispatchEvent(this.player_turn_events[this.game_instance.current_player]);
     console.log(",eep");

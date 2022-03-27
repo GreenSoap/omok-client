@@ -7,11 +7,11 @@ export default abstract class BasePlayer {
     protected lobby: Lobby,
     protected player_id: number,
     protected player_name: string,
-  ) {}
+  ) { }
 
   get id() { return this.player_id; }
   get name() { return this.player_name; }
-  
+
   abstract make_move(move: IMove): MoveResult;
   abstract schedule_move();
 }
