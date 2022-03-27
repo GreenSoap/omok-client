@@ -1,8 +1,10 @@
 
 {#if !switch_screen}
-  <wired-card class="main_menu">
+  <wired-card class="main_menu" elevation="5">
     <div>
       {#if display_lobby_creation}
+        <!-- Lobby Creation Menu -->
+        <h3>Lobby Creation</h3>
         <label for="name-input">What's your name?</label>
         <wired-card>
           <input id="name-input" placeholder="Name" bind:value={name_input}/>
@@ -12,13 +14,23 @@
         <wired-card>
           <input id="lobby-code-input" placeholder="Lobby Code" bind:value={lobby_code_input}/>
         </wired-card>
-        <wired-button type="submit" elevation="3" on:click={create_lobby}>Create Lobby!</wired-button>
+        <wired-button elevation="3" on:click={create_lobby}>Create Lobby!</wired-button>
+        <wired-button elevation="3" on:click={back_button_clicked}>Go Back!</wired-button>
+      {:else if display_lobby_join}
+        <h3>Join a Lobby</h3>
+        <label for="lobby-code-input">What is the code of the lobby you want to join?</label>
+        <wired-card>
+          <input id="lobby-code-input" placeholder="Lobby Code" bind:value={lobby_code_input}/>
+        </wired-card>
+        <wired-button elevation="3" on:click={join_lobby}>Join Lobby!</wired-button>
         <wired-button elevation="3" on:click={back_button_clicked}>Go Back!</wired-button>
       {:else}
-        <wired-button on:click={create_lobby_menu_clicked}>Create Lobby</wired-button>
-        <wired-button on:click={handle_play_click}>Join Lobby</wired-button>
-        <wired-button on:click={handle_play_click}>Play vs Computer</wired-button>
-        <wired-button on:click={handle_play_click}>Play locally</wired-button>
+        <!-- Main Menu -->
+        <h2>Welcome to omok.io!</h2>
+        <wired-button elevation="2" on:click={create_lobby_menu_clicked}>Create Lobby</wired-button>
+        <wired-button elevation="2" on:click={join_lobby_menu_clicked}>Join Lobby</wired-button>
+        <wired-button elevation="2" on:click={create_ai_lobby}>Play vs Computer</wired-button>
+        <wired-button elevation="2" on:click={create_local_menu_clicked}>Play locally</wired-button>
       {/if}
     </div>
   </wired-card>
@@ -41,6 +53,11 @@
 
     wired-button{
       font-size: 18px;
+      transition: transform .125s ease;
+
+      &:hover{
+        transform: scale3d(1.25, 1.05, 1.55);
+      }
     }
 
     input {
@@ -53,16 +70,16 @@
 </style>
 
 <script lang="ts">
-
   import "wired-elements";
   import OmokViewModel from "./omok_game/omok_view_model.svelte";
   import { LobbyType } from "../multiplayer/lobby/base_lobby";
-import { onMount } from "svelte";
+  import { onMount } from "svelte";
 
   let lobby_code_input, name_input;
 
   let switch_screen = false;
-  let display_lobby_creation = false;
+  let display_lobby_creation = false,
+      display_lobby_join = false;
 
   let app_container: HTMLElement;
 
@@ -76,7 +93,53 @@ import { onMount } from "svelte";
       props: {  
         lobby_code: lobby_code_input,
         creator_name: name_input,
+        participant_name: null,
         lobby_type: LobbyType.ONLINE_CREATE
+      },
+      intro: false
+    });
+
+    switch_screen = true;
+  }
+
+  const create_local_lobby = () => {
+    const _ = new OmokViewModel({
+      target: app_container, 
+      props: {  
+        lobby_code: null,
+        creator_name: null,
+        participant_name: null,
+        lobby_type: LobbyType.LOCAL
+      },
+      intro: false
+    });
+
+    switch_screen = true;
+  }
+
+  const join_lobby = () => {
+    const _ = new OmokViewModel({
+      target: app_container, 
+      props: {  
+        lobby_code: lobby_code_input,
+        creator_name: null,
+        participant_name: name_input,
+        lobby_type: LobbyType.ONLINE_JOIN
+      },
+      intro: false
+    });
+
+    switch_screen = true;
+  }
+
+  const create_ai_lobby = () => {
+    const _ = new OmokViewModel({
+      target: app_container, 
+      props: {  
+        lobby_code: null,
+        creator_name: null,
+        participant_name: null,
+        lobby_type: LobbyType.AI
       },
       intro: false
     });
@@ -88,20 +151,16 @@ import { onMount } from "svelte";
     display_lobby_creation = true;
   }
 
-  const back_button_clicked = () => {
-    display_lobby_creation = false;
+  const join_lobby_menu_clicked = () => {
+    display_lobby_join = true;
   }
 
-  const handle_play_click = () => {
-    /*
-      const model = new OmokViewModel({
-        target: document.querySelector('.app'), 
-        props: {  
-          lobby_code: "hehe",
-          intro: true
-        }
-      });
+  const create_local_menu_clicked = () => {
+    create_local_lobby();
+  }
 
-      switch_screen = true;*/
+  const back_button_clicked = () => {
+    display_lobby_creation = false;
+    display_lobby_join = false;
   }
 </script>

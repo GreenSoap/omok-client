@@ -12,9 +12,7 @@
     <wired-card>
       <span>Lobby Code: <strong contenteditable="true" bind:textContent={lobby_code}></strong></span>
       <br><span>Creator: <strong contenteditable="true" bind:textContent={creator_name}></strong></span>
-
-      <!--<wired-button on:click={() => create_lobby()}>Create</wired-button>
-      <wired-button on:click={() => connect_to_lobby()}>Connect</wired-button>-->
+      <wired-button on:click={start_game_button_clicked} style="float:right" bind:this={start_game_button}>Start Game!</wired-button>
     </wired-card>
   </div>
 </section>
@@ -44,14 +42,18 @@
   import OmokGame from "../../omok_engine/game_engine";
   import { MoveResult } from '../../omok_engine/move_status';
   import LobbyFactory from "../../multiplayer/lobby/lobby_factory";
-  import Lobby, { LobbyType } from "../../multiplayer/lobby/base_lobby";
+  import type Lobby from "../../multiplayer/lobby/base_lobby";
+  import type { LobbyType } from "../../multiplayer/lobby/base_lobby";
   import { GameEngineEvent, type GameEngineEventData } from "../../omok_engine/game_events";
   import type BasePlayer from "../../multiplayer/player/base_player";
   import ChatRoom from '../components/chat_room.svelte';
   import DebugPanel from './debug_panel.svelte'; 
 
   // props
-  export let lobby_code: string, creator_name: string, lobby_type: LobbyType;
+  export let lobby_code: string | null, 
+  creator_name: string | null, 
+  lobby_type: LobbyType, 
+  participant_name: string | null;
 
   let player_turn: number, 
       piece_coord: [number, number], 
@@ -60,8 +62,6 @@
 
   let last_piece_y: number;
   let last_piece_x: number;
-
-
 
   let board_gui: OmokBoardView;
   let game_instance: OmokGame;
@@ -72,60 +72,62 @@
   let rough_canvas: RoughCanvas;
 
   const board_size_px = 700;
+  let start_game_button: HTMLElement;
 
   const initialize = () => {
       game_instance = new OmokGame();
       game_instance.addEventListener(GameEngineEvent.PIECE_PLACED, piece_placed);
       game_instance.addEventListener(GameEngineEvent.GAME_OVER, game_over);
+      create_lobby();
   }
 
   const create_lobby = () => {
     lobby = LobbyFactory.create_lobby(game_instance, lobby_type, {
       lobby_code: lobby_code,
     });
-    attach_local_player_turn_eventlistener(lobby);
 
+    attach_local_player_turn_eventlistener(lobby);
+  };
+
+  const start_game_button_clicked = () => {
+    // if the game is already ongoing
+    if (game_instance.victory_status !== MoveResult.NULL) return;
     game_instance.start_game();
-  };
-
-  const connect_to_lobby = () => {
-    lobby = LobbyFactory.create_lobby(game_instance, LobbyType.ONLINE_JOIN, {
-      lobby_code: lobby_code,
-    });
-    attach_local_player_turn_eventlistener(lobby);
-  };
+    start_game_button.setAttribute('disabled', '');
+  }
   
   const attach_local_player_turn_eventlistener = (lobby: Lobby) => {
     lobby.addEventListener("local_player_turn", (event) => {
       player = (event as CustomEvent).detail.player;
+      console.log(player);
     });
   };
 
   const piece_placed = (event: CustomEvent) => {
-      const event_data: GameEngineEventData = event.detail;
+    const event_data: GameEngineEventData = event.detail;
 
-      board_gui.place_piece(event_data.x, event_data.y, game_instance.current_player);
-      player_turn = game_instance.current_player+1;
+    board_gui.place_piece(event_data.x, event_data.y, game_instance.current_player);
+    player_turn = game_instance.current_player+1;
   }
 
   const game_over = (event: CustomEvent) => {
-      victory_status = MoveResult[event.detail.victory_result];
+    victory_status = MoveResult[event.detail.victory_result];
   }
 
   // p5 functions
   const mouse_clicked = () => {
     const [piece_x, piece_y] = board_gui.get_piece_coordinate(p.mouseX, p.mouseY);
-      const can_place_piece = board_gui.can_place_piece(piece_x, piece_y);
-      if (!can_place_piece) return;
+    const can_place_piece = board_gui.can_place_piece(piece_x, piece_y);
+    if (!can_place_piece) return;
 
-      /* lobby.players[game_instance.current_player].make_move({
-        x: piece_x,
-        y: piece_y
-      }); */
-      player.make_move({
-        x: piece_x,
-        y: piece_y
-      });
+    /* lobby.players[game_instance.current_player].make_move({
+      x: piece_x,
+      y: piece_y
+    }); */
+    player.make_move({
+      x: piece_x,
+      y: piece_y
+    });
   };
 
   const preload = () => {
@@ -166,7 +168,7 @@
 
   onMount(() => {
     initialize();
-    console.log(lobby_code, creator_name);
+    console.log(lobby_code, creator_name, participant_name);
 
     const omok_board = (_p: p5) => {
       p = _p;
