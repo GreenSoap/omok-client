@@ -1,7 +1,7 @@
 import { addDoc, where, collection, type DocumentData, type DocumentReference, type Firestore, query, getDocs } from "firebase/firestore";
 
 export default class LobbyProvider {
-  private db: Firestore = null;
+  private db: Firestore;
   constructor(_db: Firestore) {
     this.db = _db;
   }
@@ -20,6 +20,7 @@ export default class LobbyProvider {
       return [lobby_document.ref, lobby_document.data()];
     } catch (error) {
       console.error(error);
+      throw error;
     }
   }
 
@@ -32,6 +33,7 @@ export default class LobbyProvider {
       return lobby_reference;
     } catch (error) {
       console.error(error);
+      throw error;
     }
   }
 }

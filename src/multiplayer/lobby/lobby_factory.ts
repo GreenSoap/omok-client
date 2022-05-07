@@ -11,7 +11,7 @@ import OnlinePlayer from "../player/online_player";
 export default class LobbyFactory {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static create_lobby(game_instance: OmokGame, lobby_type: LobbyType, options?: any): Lobby {
-    let lobby: Lobby = null;
+    let lobby: Lobby;
     switch (lobby_type) {
       case LobbyType.LOCAL:
         lobby = new LocalLobby(game_instance);
@@ -44,7 +44,7 @@ export default class LobbyFactory {
         break;
       default:
         console.error(`Lobby type ${lobby_type} not supported`);
-        return;
+        throw new Error(`Lobby type ${lobby_type} not supported`);
     }
 
     return lobby;
