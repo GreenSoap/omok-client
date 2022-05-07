@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import type OmokGame from "src/omok_engine/game_engine";
 import Lobby, { LobbyType } from "./base_lobby";
 import LocalLobby from "./local_lobby";
@@ -25,14 +26,18 @@ export default class LobbyFactory {
       case LobbyType.ONLINE_CREATE:
         lobby = new OnlineLobby(game_instance);
         (lobby as OnlineLobby).create_lobby_listing(options.lobby_code);
-        lobby.add_player(new LocalPlayer(lobby, 0, "Player 1"));
+        const lobby_creator = new LocalPlayer(lobby, 0, "Player 1");
+        lobby.add_player(lobby_creator);
+        (lobby as OnlineLobby).lobby_creator = lobby_creator;
         lobby.add_player(new OnlinePlayer(lobby, 1, "Player 2"));
         break;
       case LobbyType.ONLINE_JOIN:
         lobby = new OnlineLobby(game_instance);
         (lobby as OnlineLobby).connect_to_lobby(options.lobby_code);
         lobby.addEventListener('lobby_connected', () => {
-          lobby.add_player(new OnlinePlayer(lobby, 0, "Player 1"));
+          const lobby_creator = new OnlinePlayer(lobby, 0, "Player 1");
+          lobby.add_player(lobby_creator);
+          (lobby as OnlineLobby).lobby_creator = lobby_creator;
           lobby.add_player(new LocalPlayer(lobby, 1, "Player 2"));
           game_instance.start_game();
         });
