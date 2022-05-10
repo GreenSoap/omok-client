@@ -107,7 +107,11 @@ import OmokEventManager from "../../event/omok_event_manager";
     victory_status = MoveResult[event.detail.victory_result];
   }
 
-  // p5 functions
+  //------ p5 functions
+  
+  /**
+   * @todo TODO: Issue #8
+   */
   const mouse_clicked = () => {
     const [piece_x, piece_y] = board_gui.get_piece_coordinate(p.mouseX, p.mouseY);
     const can_place_piece = board_gui.can_place_piece(piece_x, piece_y);
