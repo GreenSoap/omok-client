@@ -52,8 +52,9 @@ export class OmokBoardView {
   }
 
   place_piece(piece_x: number, piece_y: number, player: number) {
-    this.pieces.set(`${piece_x},${piece_y}`, new OmokPiece(this.rough_canvas, piece_x * this.piece_size, piece_y * this.piece_size, this.piece_size, player));
-    this.pieces.get(`${piece_x},${piece_y}`).draw();
+    const piece = new OmokPiece(this.rough_canvas, piece_x * this.piece_size, piece_y * this.piece_size, this.piece_size, player);
+    this.pieces.set(`${piece_x},${piece_y}`, piece);
+    piece.draw();
   }
 
   can_place_piece(piece_x: number, piece_y: number) {

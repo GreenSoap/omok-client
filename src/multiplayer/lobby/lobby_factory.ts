@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import type OmokGame from "src/omok_engine/game_engine";
+import type OmokGame from "../../omok_engine/game_engine";
 import Lobby, { LobbyType } from "./base_lobby";
 import LocalLobby from "./local_lobby";
 import LocalPlayer from "../player/local_player";

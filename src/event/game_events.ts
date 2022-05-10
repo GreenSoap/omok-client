@@ -1,5 +1,6 @@
 export enum GameEngineEvent {
   PIECE_PLACED = "piece_placed",
+  PIECE_CLICKED = "piece_clicked",
   GAME_OVER = "game_over",
   GAME_START = "game_start",
   NEW_TURN = "new_turn",

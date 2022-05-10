@@ -1,8 +1,8 @@
 import { arrayUnion, DocumentReference, updateDoc, type DocumentData } from "firebase/firestore";
-import type OmokGame from "src/omok_engine/game_engine";
+import type OmokGame from "../../omok_engine/game_engine";
 import { MoveResult } from "../../omok_engine/move_status";
 import FirestoreProvider from "../firestore_provider";
-import type IMove from "../i_move";
+import type IMove from "../move/i_move";
 import type BasePlayer from "../player/base_player";
 import Lobby, { LobbyType } from "./base_lobby";
 import LobbyProvider from "./data_providers/lobby_provider";
@@ -21,7 +21,7 @@ export default class OnlineLobby extends Lobby {
   }
 
   override make_move(player: BasePlayer, move: IMove): MoveResult {
-    if (this.game_instance.current_player != player.id) return MoveResult.INVALID;
+    if (this.game_instance.state.current_player != player.id) return MoveResult.INVALID;
 
     const move_result = this.game_instance.place_piece(move.x, move.y);
     updateDoc(this.lobby_reference!, {

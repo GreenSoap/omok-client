@@ -1,4 +1,4 @@
-import type OmokGame from "src/omok_engine/game_engine";
+import type OmokGame from "../../omok_engine/game_engine";
 import Lobby, { LobbyType } from "./base_lobby";
 
 export default class AILobby extends Lobby {

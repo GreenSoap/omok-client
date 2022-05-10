@@ -1,4 +1,4 @@
-import type IMove from "../i_move";
+import type IMove from "../move/i_move";
 import type Lobby from "../lobby/base_lobby";
 import BasePlayer from "./base_player"
 
