@@ -119,16 +119,13 @@ import OmokEventManager from "../../event/omok_event_manager";
     OmokEventManager.instance.piece_clicked(piece_x, piece_y);
   };
 
-  const preload = () => {
-    board_gui.preload();
-  }
-
   const setup = () => {
     const canvas = p.createCanvas(board_size_px, board_size_px);
     canvas.parent("omok-game");
+    canvas.id('omok-game-canvas');
     p.frameRate(0);
-    rough_canvas = rough.canvas(document.getElementById("defaultCanvas0") as HTMLCanvasElement);
-    board_gui.rough_canvas = rough_canvas;
+    rough_canvas = rough.canvas(canvas.elt);
+    board_gui.initialize(rough_canvas);
     board_gui.draw();
   }
 
@@ -161,7 +158,6 @@ import OmokEventManager from "../../event/omok_event_manager";
 
     const omok_board = (_p: p5) => {
       p = _p;
-      p.preload = preload;
       p.setup = setup;
       p.mouseClicked = mouse_clicked;
       p.mouseMoved = mouseMoved;

@@ -1,11 +1,14 @@
 import { OmokPiece } from "./omok_piece";
 import type p5 from "p5";
 import type { RoughCanvas } from "roughjs/bin/canvas";
+import type { Drawable } from "roughjs/bin/core";
 
 export class OmokBoardView {
   pieces = new Map<string, OmokPiece>();
   image: p5.Image;
   rough_canvas: RoughCanvas;
+  lines: Array<Drawable> = [];
+
   constructor(
     public p: p5,
     public size: number,
@@ -16,31 +19,37 @@ export class OmokBoardView {
     public image_path: string) {
   }
 
-  preload() {
-    this.image = this.p.loadImage(this.image_path);
+  initialize(rough_canvas: RoughCanvas) {
+    this.rough_canvas = rough_canvas;
+
+    // this.image = this.p.loadImage(this.image_path);
+
+    for (let x = 0; x < this.size; x++) {
+      const props = {
+        strokeWidth: 0,
+        roughness: 0,
+        bowing: 0,
+        stroke: 'black'
+      }
+      const y_line = this.rough_canvas.line((x + this.piece_offset) * this.piece_size, 0, (x + this.piece_offset) * this.piece_size, this.size_px, props);
+      const x_line = this.rough_canvas.line(0, (x + this.piece_offset) * this.piece_size, this.size_px, (x + this.piece_offset) * this.piece_size);
+
+      this.lines.push(y_line);  // y
+      this.lines.push(x_line);  // x
+    }
+
   }
 
   draw() {
     this.p.background(234, 221, 202);
     //this.p.image(this.image, 0, 0, this.size*this.piece_size, this.size*this.piece_size);
+    this.p.strokeWeight(1.25);
 
-    for (let x = 0; x < this.size; x++) {
-      this.rough_canvas.line((x + this.piece_offset) * this.piece_size, 0, (x + this.piece_offset) * this.piece_size, this.size_px, {
-        strokeWidth: 1.25,
-        roughness: 0,
-        bowing: 0,
-        stroke: 'black'
-      });  // y
-      this.rough_canvas.line(0, (x + this.piece_offset) * this.piece_size, this.size_px, (x + this.piece_offset) * this.piece_size, {
-        strokeWidth: 1.25,
-        roughness: 0,
-        bowing: 0,
-        stroke: 'black'
-      });  // x
-    }
-
+    this.lines.forEach(line => {
+      this.rough_canvas.draw(line);
+    });
     this.pieces.forEach(piece => {
-      piece.draw();
+      this.rough_canvas.draw(piece.circle);
     });
   }
 
@@ -54,7 +63,7 @@ export class OmokBoardView {
   place_piece(piece_x: number, piece_y: number, player: number) {
     const piece = new OmokPiece(this.rough_canvas, piece_x * this.piece_size, piece_y * this.piece_size, this.piece_size, player);
     this.pieces.set(`${piece_x},${piece_y}`, piece);
-    piece.draw();
+    this.rough_canvas.draw(piece.circle);
   }
 
   can_place_piece(piece_x: number, piece_y: number) {
