@@ -121,8 +121,8 @@ import OmokEventManager from "../../event/omok_event_manager";
 
   const setup = () => {
     const canvas = p.createCanvas(board_size_px, board_size_px);
-    canvas.parent("omok-game");
     canvas.id('omok-game-canvas');
+    canvas.parent("omok-game");
     p.frameRate(0);
     rough_canvas = rough.canvas(canvas.elt);
     board_gui.initialize(rough_canvas);
