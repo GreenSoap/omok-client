@@ -43,7 +43,6 @@ export class OmokBoardView {
   draw() {
     this.p.background(234, 221, 202);
     //this.p.image(this.image, 0, 0, this.size*this.piece_size, this.size*this.piece_size);
-    this.p.strokeWeight(1.25);
 
     this.lines.forEach(line => {
       this.rough_canvas.draw(line);

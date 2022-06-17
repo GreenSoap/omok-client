@@ -5,11 +5,6 @@ export enum GameEngineEvent {
   PIECE_PLACED = "piece_placed",
 
   /**
-   * @deprecated Moved to GlobalEvent
-   */
-  PIECE_CLICKED = "piece_clicked",
-
-  /**
    * Fired when the game is over.
    */
   GAME_OVER = "game_over",
@@ -25,7 +20,7 @@ export enum GameEngineEvent {
   NEW_TURN = "new_turn",
 }
 
-export enum GlobalEvent {
+export enum UIEvent {
   /**
    * Fired when a piece is clicked on the board.
    */

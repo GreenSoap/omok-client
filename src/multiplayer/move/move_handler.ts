@@ -1,10 +1,9 @@
-import { GameEngineEvent } from "../..//event/game_events";
+import { UIEvent } from "../..//event/game_events";
 import OmokEventManager from "../..//event/omok_event_manager";
 import type BasePlayer from "../player/base_player";
-import LocalPlayer from "../player/local_player";
-import OnlinePlayer from "../player/online_player";
 import type IMove from "./i_move";
-import RandomAIPlayer from "../player/random_ai_player";
+import type RandomAIPlayer from "../player/random_ai_player";
+import type OmokGame from "src/omok_engine/game_engine";
 
 /**
  * Class that handles retrieving moves from players
@@ -18,7 +17,7 @@ export default class MoveHandler {
   private async get_local_player_move(): Promise<IMove>{
     return new Promise((resolve) => {
       const on_piece_clicked = (event: Event) => {
-        OmokEventManager.instance.removeEventListener(GameEngineEvent.PIECE_CLICKED, on_piece_clicked);
+        OmokEventManager.instance.removeEventListener(UIEvent.PIECE_CLICKED, on_piece_clicked);
         
         const {piece_x, piece_y} = (event as CustomEvent).detail;
         resolve({
@@ -29,7 +28,7 @@ export default class MoveHandler {
         // TODO Reject when timer runs out
       };
 
-      OmokEventManager.instance.addEventListener(GameEngineEvent.PIECE_CLICKED, on_piece_clicked);
+      OmokEventManager.instance.addEventListener(UIEvent.PIECE_CLICKED, on_piece_clicked);
     });
   }
 
@@ -39,24 +38,20 @@ export default class MoveHandler {
    * @returns The move made by the ai player
    * @todo TODO: Issue #9
    */
-  private async get_ai_player_move(player: RandomAIPlayer): Promise<IMove>{
-    return player.get_move();
+  private async get_ai_player_move(player: RandomAIPlayer, game_instance: OmokGame): Promise<IMove>{
+    return player.get_move(game_instance);
   }
 
   /**
-   * @deprecated Based on player instance type, retrieves a move from the player.
+   * @description Based on player instance type, retrieves a move from the player.
    * @param player The player to get the move from
    * @returns The move made by the player
    */
-  public async get_move_for_player(player: BasePlayer): Promise<IMove> {
-    switch(true) {
-      case player instanceof LocalPlayer: 
-        return this.get_local_player_move();
-      case player instanceof OnlinePlayer: 
-        return this.get_local_player_move();
-      case player instanceof RandomAIPlayer: 
-        return this.get_ai_player_move(player as RandomAIPlayer);
-      default:
+  public async get_move_for_player(player: BasePlayer, game_instance: OmokGame): Promise<IMove> {
+    switch(player.type) {
+      case 'ai': 
+        return this.get_ai_player_move(player as RandomAIPlayer, game_instance);
+      case 'local': 
         return this.get_local_player_move();
     }
   }

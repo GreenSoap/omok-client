@@ -1,7 +1,6 @@
 <script lang="ts">
 	import 'wired-elements';
 	import OmokViewModel from './omok_game/omok_view_model.svelte';
-	import { LobbyType } from '../multiplayer/lobby/base_lobby';
 	import { onMount } from 'svelte';
 
 	let lobby_code_input, name_input;
@@ -23,7 +22,6 @@
 				lobby_code: lobby_code_input,
 				creator_name: name_input,
 				participant_name: null,
-				lobby_type: LobbyType.ONLINE_CREATE
 			},
 			intro: false
 		});
@@ -38,7 +36,6 @@
 				lobby_code: null,
 				creator_name: null,
 				participant_name: null,
-				lobby_type: LobbyType.LOCAL
 			},
 			intro: false
 		});
@@ -53,7 +50,6 @@
 				lobby_code: lobby_code_input,
 				creator_name: null,
 				participant_name: name_input,
-				lobby_type: LobbyType.ONLINE_JOIN
 			},
 			intro: false
 		});
@@ -68,7 +64,6 @@
 				lobby_code: null,
 				creator_name: null,
 				participant_name: null,
-				lobby_type: LobbyType.AI
 			},
 			intro: false
 		});

@@ -39,21 +39,19 @@
   import rough from "roughjs";
   import type { RoughCanvas } from "roughjs/bin/canvas";
   import { OmokBoardView } from './omok_board';
-  import OmokGame from "../../omok_engine/game_engine";
+  import type OmokGame from "../../omok_engine/game_engine";
   import { MoveResult } from '../../omok_engine/move_status';
-  import LobbyFactory from "../../multiplayer/lobby/lobby_factory";
-  import type Lobby from "../../multiplayer/lobby/base_lobby";
-  import type { LobbyType } from "../../multiplayer/lobby/base_lobby";
   import { GameEngineEvent, type GameEngineEventData } from "../../event/game_events";
   import type BasePlayer from "../../multiplayer/player/base_player";
   import ChatRoom from '../components/chat_room.svelte';
   import DebugPanel from './debug_panel.svelte'; 
-import OmokEventManager from "../../event/omok_event_manager";
+  import OmokEventManager from "../../event/omok_event_manager";
+
+  import Lobby from '../../multiplayer/lobby/lobby';
 
   // props
   export let lobby_code: string | null, 
   creator_name: string | null, 
-  lobby_type: LobbyType, 
   participant_name: string | null;
 
   let player_turn: number, 
@@ -76,9 +74,17 @@ import OmokEventManager from "../../event/omok_event_manager";
   let start_game_button: HTMLElement;
 
   const initialize = () => {
-      game_instance = new OmokGame();
-      lobby = LobbyFactory.create_lobby(game_instance, lobby_type, { lobby_code: lobby_code });
-      attach_local_player_turn_eventlistener(lobby);
+      lobby = new Lobby({
+        player_infos: [{
+          name: 'Player One',
+          type: 'local'
+        },
+        {
+          name: 'Player Two [COMPOTER]',
+          type: 'ai'
+        }]
+      });
+      game_instance = lobby.game_instance;
       OmokEventManager.instance.addEventListener(GameEngineEvent.PIECE_PLACED, (e) => piece_placed(e as CustomEvent));
       OmokEventManager.instance.addEventListener(GameEngineEvent.GAME_OVER, (e) => game_over(e as CustomEvent));
   }
@@ -89,12 +95,6 @@ import OmokEventManager from "../../event/omok_event_manager";
     game_instance.start_game();
     start_game_button.setAttribute('disabled', '');
   }
-  
-  const attach_local_player_turn_eventlistener = (lobby: Lobby) => {
-    lobby.addEventListener("local_player_turn", (event) => {
-      player = (event as CustomEvent).detail.player;
-    });
-  };
 
   const piece_placed = (event: CustomEvent) => {
     const event_data: GameEngineEventData = event.detail;

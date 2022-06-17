@@ -1,5 +1,5 @@
 import type OmokGameState from '../omok_engine/game_state';
-import { GameEngineEvent, GlobalEvent } from './game_events';
+import { GameEngineEvent, UIEvent } from './game_events';
 
 /**
  * Global event manager
@@ -27,13 +27,13 @@ export default class OmokEventManager extends EventTarget {
 // ---------------------------------------------------------------------------------------
 
   /**
-   * @description Dispatches a {@link GlobalEvent.PIECE_CLICKED} event.
+   * @description Dispatches a {@link UIEvent.PIECE_CLICKED} event.
    * @param piece_x x-coordinate of the piece
    * @param piece_y y-coordinate of the piece
    */
 	public piece_clicked(piece_x: number, piece_y: number) {
     const event_data = { piece_x, piece_y };
-    const event = new CustomEvent(GlobalEvent.PIECE_CLICKED, { detail: event_data });
+    const event = new CustomEvent(UIEvent.PIECE_CLICKED, { detail: event_data });
 		this.dispatchEvent(event);
 	}
 
