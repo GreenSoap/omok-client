@@ -1,29 +1,22 @@
 import Player from './player';
+import OmokEventManager from '../event/omok_event_manager';
 import { MoveResult } from './move_status';
-import { GameEngineEvent } from './game_events';
 import Board from './board/board';
+import OmokGameState from './game_state';
 
-export default class OmokGame extends EventTarget {
+export default class OmokGame {
 	board_size = 19;
-	players: Array<Player> = [];
-	current_player = 0;
-	player_amount = 2;
-	win_condition = 5;
-	victory_status = MoveResult.NULL;
-  game_board: Board;
+	public state: OmokGameState;
 
 	constructor() {
-		super();
-		this.initialize_game();
-	}
-
-	private initialize_game() {
-    this.game_board = new Board(this.board_size);
+		const game_board = new Board(this.board_size);
+		this.state = new OmokGameState(game_board);
 		this.create_players();
 	}
 
 	public start_game() {
-		this.dispatch_game_start_event();
+		OmokEventManager.instance.game_start(this.state);
+		OmokEventManager.instance.new_turn(this.state);
 		return;
 	}
 
@@ -33,48 +26,40 @@ export default class OmokGame extends EventTarget {
 	}
 
 	private create_players() {
-		for (let p = 0; p < this.player_amount; p++) {
+		for (let p = 0; p < this.state.player_amount; p++) {
 			const new_player = this.create_player();
-			this.players.push(new_player);
+			this.state.players.push(new_player);
 		}
 	}
 
 	public place_piece(x: number, y: number) {
 		//check if move is valid
-		this.victory_status = this.is_move_valid(x, y) ? MoveResult.VALID : MoveResult.INVALID;
-		if (this.victory_status === MoveResult.INVALID) return MoveResult.INVALID;
+		this.state.victory_status = this.is_move_valid(x, y) ? MoveResult.VALID : MoveResult.INVALID;
+		if (this.state.victory_status === MoveResult.INVALID) 
+			return MoveResult.INVALID;
 
     // Place piece on game_board and player's board
-		this.players[this.current_player].place_piece(x, y);
-    this.game_board.place_piece(x, y, this.current_player+1); // +1 to avoid 0
-		this.dispatch_piece_placed_event(x, y);
+		this.state.players[this.state.current_player].place_piece(x, y);
+    this.state.game_board.place_piece(x, y, this.state.current_player+1); // +1 to avoid 0
+		OmokEventManager.instance.piece_placed(x, y, this.state);
 
 		const move_win_status = this.is_move_win(x, y);
-		this.current_player = (this.current_player + 1) % this.players.length;
+		this.state.current_player = (this.state.current_player + 1) % this.state.players.length;
 
 		if (
 			move_win_status === MoveResult.WIN_DIAGONAL_LEFT ||
 			move_win_status === MoveResult.WIN_DIAGONAL_RIGHT ||
 			move_win_status === MoveResult.WIN_STRAIGHT
 		) {
-			this.dispatch_game_over_event();
+			OmokEventManager.instance.game_over(this.state);
 		}
 
-		this.dispatch_new_turn_event();
+		OmokEventManager.instance.new_turn(this.state);
 		return move_win_status;
 	}
 
 	private is_move_valid(x: number, y: number) {
-		// Check if the position is occupied by another player's piece
-
-		/* for (let i = 0; i < this.players.length - 1; i++) {
-			const current_piece = this.players[i].board.get_piece_value(x, y);
-			const next_player_piece = this.players[i + 1].board.get_piece_value(x, y);
-			if (current_piece || next_player_piece) return false;
-		}
-		return true; */
-
-    return this.game_board.get_piece_value(x, y) === 0;
+    return this.state.game_board.get_piece_value(x, y) === 0;
 	}
 
 	private is_move_win(x: number, y: number) {
@@ -82,24 +67,24 @@ export default class OmokGame extends EventTarget {
 		const move_result = this.detect_victory(
 			x,
 			y,
-			this.players[this.current_player].board.field,
+			this.state.players[this.state.current_player].board.field,
 			true
 		);
 		if (move_result !== MoveResult.VALID) {
-			this.victory_status = move_result;
-			return this.victory_status;
+			this.state.victory_status = move_result;
+			return this.state.victory_status;
 		}
 
 		// check rows
 		const move_inverted_result = this.detect_victory(
 			x,
 			y,
-			this.players[this.current_player].board_inverted.field,
+			this.state.players[this.state.current_player].board_inverted.field,
 			false
 		);
-		if (move_inverted_result !== MoveResult.VALID) this.victory_status = move_inverted_result;
+		if (move_inverted_result !== MoveResult.VALID) this.state.victory_status = move_inverted_result;
 
-		return this.victory_status;
+		return this.state.victory_status;
 	}
 
 	private detect_victory(
@@ -154,48 +139,5 @@ export default class OmokGame extends EventTarget {
 			}
 		}
 		return moves;
-	}
-
-	private dispatch_piece_placed_event(x: number, y: number) {
-		this.dispatchEvent(
-			new CustomEvent(GameEngineEvent.PIECE_PLACED, {
-				detail: {
-					x,
-					y,
-					player_id: this.current_player
-				}
-			})
-		);
-	}
-
-	private dispatch_game_over_event() {
-		this.dispatchEvent(
-			new CustomEvent(GameEngineEvent.GAME_OVER, {
-				detail: {
-					player_id: this.current_player,
-					victory_result: this.victory_status
-				}
-			})
-		);
-	}
-
-	private dispatch_game_start_event() {
-		this.dispatchEvent(
-			new CustomEvent(GameEngineEvent.GAME_START, {
-				detail: {
-					player_amount: this.player_amount
-				}
-			})
-		);
-	}
-
-	private dispatch_new_turn_event() {
-		this.dispatchEvent(
-			new CustomEvent(GameEngineEvent.NEW_TURN, {
-				detail: {
-					player_id: this.current_player
-				}
-			})
-		);
 	}
 }
